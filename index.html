@@ -413,20 +413,26 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
 .ca-price span{color:var(--txt-dim);font-size:16px}
 .ca-desc{color:var(--txt-dim);font-size:14.5px;margin:0 0 22px;position:relative}
 
-.offres{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
-.offre{display:flex;gap:18px;align-items:flex-start;background:var(--bg-2);border:1px solid var(--line);
-  border-radius:18px;padding:22px;position:relative;overflow:hidden;transition:transform .4s,border-color .4s,background .4s}
-.offre:hover{transform:translateY(-4px);border-color:rgba(255,74,28,.4);background:var(--surface)}
-.offre-mark{flex:0 0 auto;width:64px;height:64px;border-radius:14px;background:#fff;overflow:hidden;
-  display:grid;place-items:center;font-family:"Archivo";font-weight:900;font-size:20px;color:#0E1116}
-.offre-mark img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:6px;background:#fff}
-.offre-mark{position:relative}
-.offre-body{min-width:0}
-.offre-body h3{font-size:19px;font-stretch:108%;margin-bottom:10px}
-.offre-body ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
-.offre-body li{position:relative;padding-left:18px;font-size:14.5px;color:var(--txt-dim);line-height:1.45}
-.offre-body li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:50%;background:var(--accent);opacity:.7}
-.offre-body .pct{color:var(--accent);font-weight:700}
+.offres{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+.offre{position:relative;display:flex;flex-direction:column;gap:16px;overflow:hidden;
+  background:linear-gradient(165deg,var(--surface),var(--bg-2));border:1px solid var(--line);
+  border-radius:18px;padding:24px;transition:transform .4s,border-color .4s,box-shadow .4s}
+.offre::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));transform:scaleX(0);transform-origin:left;transition:transform .45s ease}
+.offre:hover{transform:translateY(-5px);border-color:rgba(255,74,28,.42);box-shadow:0 26px 50px -30px rgba(0,0,0,.85)}
+.offre:hover::before{transform:scaleX(1)}
+.offre-head{display:flex;align-items:center;gap:15px}
+.offre-mark{position:relative;flex:0 0 auto;width:60px;height:60px;border-radius:14px;background:#fff;overflow:hidden;
+  display:grid;place-items:center;font-family:"Archivo";font-weight:900;font-size:19px;color:#0E1116;
+  box-shadow:0 6px 16px -8px rgba(0,0,0,.7),inset 0 0 0 1px rgba(0,0,0,.06)}
+.offre-mark img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:7px;background:#fff}
+.offre-head h3{font-size:18.5px;font-stretch:108%;line-height:1.12}
+.offre ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.offre li{position:relative;padding-left:27px;font-size:14.5px;color:var(--txt);line-height:1.45}
+.offre li::before{content:"✓";position:absolute;left:0;top:1px;width:18px;height:18px;border-radius:50%;
+  background:rgba(255,74,28,.15);color:var(--accent);font-size:11px;font-weight:800;display:grid;place-items:center;line-height:1}
+.offre .pct{display:inline-block;background:rgba(255,74,28,.16);color:var(--accent);font-weight:700;
+  font-size:12.5px;padding:1px 8px;border-radius:7px;margin-right:3px}
 @media(max-width:520px){.offres{grid-template-columns:1fr}}
 
 @media(prefers-reduced-motion:reduce){
@@ -1033,8 +1039,8 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
         var logo = o.logo ? '<img src="'+esc(o.logo)+'" alt="'+esc(o.nom)+'" onerror="this.remove()">' : '';
         var lignes = (o.lignes||[]).map(ligne).join('');
         return '<article class="offre reveal"'+style+'>'
-             +   '<div class="offre-mark">'+esc(initials(o.nom))+logo+'</div>'
-             +   '<div class="offre-body"><h3>'+esc(o.nom)+'</h3><ul>'+lignes+'</ul></div>'
+             +   '<div class="offre-head"><div class="offre-mark">'+esc(initials(o.nom))+logo+'</div><h3>'+esc(o.nom)+'</h3></div>'
+             +   '<ul>'+lignes+'</ul>'
              + '</article>';
       }).join('');
     })();
