@@ -25,7 +25,10 @@
   Si une photo est absente, les initiales s'affichent à la place.
 
   POUR LES LOGOS PARTENAIRES (visibles par tous) :
-  dossier "partenaires" à côté du fichier, logos en PNG transparent.
+  dossier "partenaires" à côté du fichier, logos PNG nommés
+  garage-erdre.png, atlantic-performance.png… (voir README.md).
+
+  → Les noms de fichiers attendus sont listés dans README.md.
 
   BLOCS À MODIFIER : cherchez  <!-- STAFF -->  <!-- RASSEMBLEMENTS -->
   <!-- CONVOIS -->  <!-- PARTENAIRES -->  <!-- CONTACT -->
@@ -597,45 +600,46 @@ body.editing .card{outline:1px dashed rgba(255,74,28,.35);outline-offset:-1px}
   <div class="wrap">
     <div class="partners">
 
-      <!-- Un bloc = un partenaire. Pour un logo : remplacez le texte du .mark par
-           <img src="partenaires/nom.png" alt="Nom du partenaire"> -->
+      <!-- Un bloc = un partenaire. Le logo se charge automatiquement depuis
+           partenaires/<identifiant>.png (voir data-photo-id). Déposez le fichier
+           dans le dossier "partenaires" : s'il est absent, les initiales restent. -->
       <article class="partner reveal" data-photo-id="garage-erdre" data-photo-type="partner">
-        <div class="mark">GE</div>
+        <div class="mark">GE<img src="partenaires/garage-erdre.png" alt="Garage de l'Erdre" onerror="this.remove()"></div>
         <h3>Garage de l'Erdre</h3>
         <div class="kind">MÉCANIQUE</div>
         <p>Entretien et préparation. Tarif préférentiel sur la main-d'œuvre pour les membres.</p>
       </article>
 
       <article class="partner reveal" style="--d:70ms" data-photo-id="atlantic-performance" data-photo-type="partner">
-        <div class="mark">AP</div>
+        <div class="mark">AP<img src="partenaires/atlantic-performance.png" alt="Atlantic Performance" onerror="this.remove()"></div>
         <h3>Atlantic Performance</h3>
         <div class="kind">PRÉPARATION</div>
         <p>Banc de puissance et optimisation moteur. Ils accueillent une journée dyno par an.</p>
       </article>
 
       <article class="partner reveal" style="--d:140ms" data-photo-id="carrosserie-sevre" data-photo-type="partner">
-        <div class="mark">CS</div>
+        <div class="mark">CS<img src="partenaires/carrosserie-sevre.png" alt="Carrosserie Sèvre" onerror="this.remove()"></div>
         <h3>Carrosserie Sèvre</h3>
         <div class="kind">CARROSSERIE</div>
         <p>Peinture et restauration. Partenaire de nos rassemblements de printemps.</p>
       </article>
 
       <article class="partner reveal" style="--d:210ms" data-photo-id="detailing-nantes" data-photo-type="partner">
-        <div class="mark">DN</div>
+        <div class="mark">DN<img src="partenaires/detailing-nantes.png" alt="Detailing Nantes" onerror="this.remove()"></div>
         <h3>Detailing Nantes</h3>
         <div class="kind">ESTHÉTIQUE</div>
         <p>Lavage et protection céramique. Démonstration sur place à chaque grand rassemblement.</p>
       </article>
 
       <article class="partner reveal" style="--d:280ms" data-photo-id="pneus-loire-ouest" data-photo-type="partner">
-        <div class="mark">PL</div>
+        <div class="mark">PL<img src="partenaires/pneus-loire-ouest.png" alt="Pneus Loire Ouest" onerror="this.remove()"></div>
         <h3>Pneus Loire Ouest</h3>
         <div class="kind">PNEUMATIQUES</div>
         <p>Montage et géométrie. Contrôle gratuit avant chaque départ en convoi.</p>
       </article>
 
       <article class="partner reveal" style="--d:350ms" data-photo-id="cafe-circuit" data-photo-type="partner">
-        <div class="mark">CC</div>
+        <div class="mark">CC<img src="partenaires/cafe-circuit.png" alt="Café du Circuit" onerror="this.remove()"></div>
         <h3>Café du Circuit</h3>
         <div class="kind">RESTAURATION</div>
         <p>Notre point de rendez-vous du samedi matin. Café offert aux membres avant le départ.</p>
@@ -668,7 +672,7 @@ body.editing .card{outline:1px dashed rgba(255,74,28,.35);outline-offset:-1px}
 <button type="button" class="edit-toggle" id="editToggle" aria-pressed="false">
   <i></i><span>Mode édition</span>
 </button>
-<div class="edit-hint" id="editHint">Cliquez sur « Photo » pour ajouter une image, sur « × » pour la retirer.</div>
+<div class="edit-hint" id="editHint">Aperçu sur cet appareil seulement · pour publier pour tous, déposez les fichiers dans photos/ et partenaires/ (voir README).</div>
 <input type="file" id="photoInput" accept="image/*" hidden>
 
 <footer>
