@@ -312,9 +312,9 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       </div>
       <div class="counters reveal" style="--d:120ms">
         <div><b data-count="2021" data-plain="1">2021</b><span>Année de création</span></div>
-        <div><b data-count="128">0</b><span>Membres</span></div>
-        <div><b data-count="19">0</b><span>Rassemblements organisés</span></div>
-        <div><b data-count="11">0</b><span>Convois menés</span></div>
+        <div><b data-count="0" data-auto="membres">0</b><span>Membres</span></div>
+        <div><b data-count="0" data-auto="rassemblements">0</b><span>Rassemblements organisés</span></div>
+        <div><b data-count="0" data-auto="convois">0</b><span>Convois menés</span></div>
       </div>
     </div>
   </div>
@@ -612,6 +612,29 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
     <span>Rassemblements et convois en Loire-Atlantique</span>
   </div>
 </footer>
+
+<!-- ══════ Compteurs automatiques ══════
+     Ces trois chiffres se calculent tout seuls à partir du contenu de la page.
+     Vous n'avez rien à mettre à jour à la main :
+       · Membres = nombre de membres dans la liste (▼ LES MEMBRES ▼)
+       · Rassemblements organisés = lignes du tableau « Ceux qu'on a déjà organisés »
+       · Convois menés = convois marqués « déjà réalisés » (bloc en bas des convois) -->
+<script>
+(function(){
+  function setAuto(name, value){
+    var el = document.querySelector('[data-auto="'+name+'"]');
+    if (el) el.dataset.count = String(value);
+  }
+  var membres = Array.isArray(window.AGM_BUREAU)
+      ? window.AGM_BUREAU.length
+      : document.querySelectorAll('#crew .card').length;
+  var rassemblements = document.querySelectorAll('.archive tbody tr').length;
+  var convois = document.querySelectorAll('.convoy.done').length;
+  setAuto('membres', membres);
+  setAuto('rassemblements', rassemblements);
+  setAuto('convois', convois);
+})();
+</script>
 
 <script>
 (function(){
