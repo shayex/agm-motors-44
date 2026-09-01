@@ -354,6 +354,49 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
 .card-agm{max-width:520px;margin:0 auto 52px;border-radius:22px;padding:2px;
   background:linear-gradient(135deg,var(--accent),var(--accent-2),transparent 70%);
   box-shadow:0 30px 60px -30px var(--glow)}
+
+/* Zone à deux colonnes : abonnement + carte de membre 3D */
+.carte-hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;
+  max-width:1000px;margin:0 auto 56px}
+.carte-hero .card-agm{max-width:none;margin:0}
+@media(max-width:860px){.carte-hero{grid-template-columns:1fr;gap:44px}}
+
+/* Carte de membre 3D animée */
+.card3d-scene{perspective:1200px;display:flex;justify-content:center}
+.card3d{width:min(430px,88vw);aspect-ratio:1.586/1;position:relative;transform-style:preserve-3d;
+  transform:rotateY(-14deg) rotateX(7deg);animation:cardFloat 9s ease-in-out infinite;will-change:transform}
+@keyframes cardFloat{
+  0%{transform:rotateY(-15deg) rotateX(8deg) translateY(0)}
+  50%{transform:rotateY(15deg) rotateX(3deg) translateY(-12px)}
+  100%{transform:rotateY(-15deg) rotateX(8deg) translateY(0)}}
+.card3d-face{position:absolute;inset:0;border-radius:18px;overflow:hidden;padding:22px 24px;
+  transform-style:preserve-3d;color:var(--txt);
+  background:
+    radial-gradient(120% 140% at 15% 10%,rgba(255,74,28,.35),transparent 45%),
+    radial-gradient(120% 140% at 90% 90%,rgba(44,111,232,.28),transparent 45%),
+    linear-gradient(150deg,#20141b,#0b0d12 70%);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 40px 70px -24px rgba(0,0,0,.85), inset 0 1px 0 rgba(255,255,255,.12);
+  display:flex;flex-direction:column}
+/* reflet holographique qui balaie la carte */
+.c3-glare{position:absolute;inset:-30%;pointer-events:none;
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.28) 48%,rgba(255,255,255,.05) 52%,transparent 60%);
+  transform:translateX(-30%);animation:c3glare 9s ease-in-out infinite}
+@keyframes c3glare{0%,100%{transform:translateX(-35%)}50%{transform:translateX(35%)}}
+.c3-top{display:flex;justify-content:space-between;align-items:center;transform:translateZ(30px)}
+.c3-brand{font-family:"Archivo";font-weight:900;font-stretch:118%;font-size:16px;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+.c3-brand i{width:8px;height:8px;border-radius:2px;background:var(--accent);box-shadow:0 0 12px var(--glow);font-style:normal}
+.c3-tier{font-size:10px;font-weight:700;letter-spacing:.18em;color:var(--accent);border:1px solid rgba(255,74,28,.5);border-radius:99px;padding:3px 9px}
+.c3-chip{width:46px;height:34px;border-radius:8px;margin:18px 0 auto;transform:translateZ(24px);
+  background:linear-gradient(135deg,#f6c56b,#b8862f);position:relative;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.c3-chip::before{content:"";position:absolute;inset:6px;border:1px solid rgba(0,0,0,.35);border-radius:4px}
+.c3-chip::after{content:"";position:absolute;left:50%;top:6px;bottom:6px;width:1px;background:rgba(0,0,0,.35)}
+.c3-logo{font-family:"Archivo";font-weight:900;font-stretch:118%;font-size:clamp(18px,3.6vw,24px);letter-spacing:.01em;
+  transform:translateZ(20px);margin:8px 0}
+.c3-logo em{font-style:normal;color:var(--accent)}
+.c3-bottom{display:flex;justify-content:space-between;gap:14px;transform:translateZ(16px)}
+.c3-lbl{display:block;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--txt-dim)}
+.c3-val{display:block;font-family:"Archivo";font-weight:700;font-size:13px;letter-spacing:.02em;margin-top:3px}
 .card-agm-face{border-radius:20px;background:linear-gradient(160deg,#1b1016,#0E1116);
   border:1px solid var(--line);padding:30px 32px;position:relative;overflow:hidden}
 .card-agm-face::before{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;
@@ -876,16 +919,36 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       <p>Un abonnement à l'année qui donne accès à toutes les remises négociées chez nos partenaires. Rentabilisée en une seule prestation.</p>
     </div>
 
-    <!-- La carte d'abonnement (prix modifiable ci-dessous) -->
-    <div class="card-agm reveal">
-      <div class="card-agm-face">
-        <div class="ca-top">
-          <span class="ca-brand"><i></i>CARTE AGM</span>
-          <span class="ca-year">Abonnement annuel</span>
+    <!-- La carte d'abonnement (à gauche) + la carte de membre 3D animée (à droite) -->
+    <div class="carte-hero reveal">
+      <div class="card-agm">
+        <div class="card-agm-face">
+          <div class="ca-top">
+            <span class="ca-brand"><i></i>CARTE AGM</span>
+            <span class="ca-year">Abonnement annuel</span>
+          </div>
+          <div class="ca-price"><b id="cartePrix">20€</b><span>/ an</span></div>
+          <p class="ca-desc">Valable 12 mois · accès à toutes les offres partenaires ci-dessous.</p>
+          <a href="#contact" class="btn btn-p">Obtenir ma carte</a>
         </div>
-        <div class="ca-price"><b id="cartePrix">20€</b><span>/ an</span></div>
-        <p class="ca-desc">Valable 12 mois · accès à toutes les offres partenaires ci-dessous.</p>
-        <a href="#contact" class="btn btn-p">Obtenir ma carte</a>
+      </div>
+
+      <div class="card3d-scene">
+        <div class="card3d" id="card3d">
+          <div class="card3d-face">
+            <span class="c3-glare"></span>
+            <div class="c3-top">
+              <span class="c3-brand"><i></i>CARTE AGM</span>
+              <span class="c3-tier">MEMBRE</span>
+            </div>
+            <div class="c3-chip"></div>
+            <div class="c3-logo">AGM<em>_</em>MOTORS 44</div>
+            <div class="c3-bottom">
+              <div><span class="c3-lbl">Membre</span><span class="c3-val">Nom Prénom</span></div>
+              <div><span class="c3-lbl">Valide</span><span class="c3-val">12 mois</span></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1103,6 +1166,28 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
         var dy = (e.clientY / window.innerHeight - 0.5) * 8;
         heroWrap.style.transform = 'translate('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px)';
       }, {passive:true});
+    }
+
+    /* Carte de membre 3D : suit la souris et se fige pendant le survol */
+    var card3d = document.getElementById('card3d');
+    if (card3d){
+      var scene = card3d.parentNode, craf = null;
+      scene.addEventListener('mousemove', function(e){
+        var r = card3d.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        if (craf) return;
+        craf = requestAnimationFrame(function(){
+          craf = null;
+          card3d.style.animation = 'none';
+          card3d.style.transform = 'rotateY('+(px*26).toFixed(2)+'deg) rotateX('+(-py*20).toFixed(2)+'deg) translateY(-6px)';
+        });
+      });
+      scene.addEventListener('mouseleave', function(){
+        if (craf){ cancelAnimationFrame(craf); craf = null; }
+        card3d.style.transform = '';
+        card3d.style.animation = '';   // reprend le flottement automatique
+      });
     }
   }
 })();
