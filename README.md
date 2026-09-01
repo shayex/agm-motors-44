@@ -93,6 +93,31 @@ Après modification : **Commit changes** → le site se met à jour tout seul.
 
 ---
 
+## Changer un partenaire / ajouter / retirer un partenaire
+
+Même principe que pour le bureau : tous les partenaires sont dans **une seule
+liste**. Cherchez dans `index.html` le repère :
+
+```
+▼▼▼  LES PARTENAIRES — MODIFIEZ TOUT ICI  ▼▼▼
+```
+
+Chaque partenaire tient sur une ligne :
+
+```js
+{ id:"garage-erdre", nom:"Garage de l'Erdre", type:"Mécanique", texte:"…", logo:"partenaires/garage-erdre.png" },
+```
+
+- **Changer le nom** → champ `nom`. Il met aussi à jour **le bandeau défilant**
+  des partenaires en haut de la section, et recalcule les initiales de repli.
+- **Changer la catégorie / la description** → champs `type` et `texte`.
+- **Associer un logo** → champ `logo` (fichier déposé dans `partenaires/`).
+  Laissez `logo:""` s'il n'y en a pas encore : les initiales s'affichent.
+- **Ajouter / retirer** un partenaire → ajoutez / supprimez une ligne (gardez la
+  virgule en fin de ligne, et un `id` unique sans espace ni accent).
+
+---
+
 ## Le site est-il bien publié ? (GitHub Pages)
 
 Pour que le lien public affiche le site (et pas le code source), **GitHub Pages**
