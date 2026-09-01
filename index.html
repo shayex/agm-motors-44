@@ -155,7 +155,10 @@ section{padding:120px 0;position:relative}
 .ev:hover{transform:translateX(6px);border-color:rgba(255,74,28,.45);background:var(--surface)}
 .ev .date{text-align:center;border-right:1px solid var(--line);padding-right:20px}
 .ev .date .d{display:block;font-family:"Archivo";font-weight:900;font-stretch:125%;font-size:42px;line-height:1}
-.ev .date .m{font-size:12px;font-weight:600;letter-spacing:.13em;color:var(--accent)}
+.ev .date .m{font-size:12px;font-weight:600;letter-spacing:.13em;color:var(--accent);text-transform:uppercase}
+.ev-empty{border:1px dashed var(--line-strong);border-radius:18px;padding:34px 30px;text-align:center;background:transparent}
+.ev-empty h3{font-size:22px;font-stretch:110%;margin-bottom:10px}
+.ev-empty p{color:var(--txt-dim);max-width:46em;margin:0 auto;font-size:15.5px}
 .ev h3{font-size:22px;margin-bottom:5px;font-stretch:110%}
 .ev .where{font-size:15px;color:var(--txt-dim)}
 .ev .hour{font-family:"Archivo";font-weight:700;font-size:16px;white-space:nowrap;color:var(--txt-dim)}
@@ -493,23 +496,54 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       <p>Entrée libre pour les visiteurs comme pour les exposants. Pas besoin d'être membre pour venir.</p>
     </div>
 
-    <div class="events">
-      <article class="ev reveal">
-        <div class="date"><span class="d">27</span><span class="m">SEPT</span></div>
-        <div><h3>Cars &amp; Coffee de la Chapelle</h3><span class="where">Parking du complexe sportif, La Chapelle-sur-Erdre</span></div>
-        <span class="hour">09h — 12h</span>
-      </article>
-      <article class="ev reveal" style="--d:90ms">
-        <div class="date"><span class="d">18</span><span class="m">OCT</span></div>
-        <div><h3>Rassemblement d'automne</h3><span class="where">Zone du Bois Cesbron, Orvault</span></div>
-        <span class="hour">10h — 17h</span>
-      </article>
-      <article class="ev reveal" style="--d:180ms">
-        <div class="date"><span class="d">13</span><span class="m">DÉC</span></div>
-        <div><h3>Sortie de Noël et collecte de jouets</h3><span class="where">Place du Bouffay, Nantes</span></div>
-        <span class="hour">14h — 19h</span>
-      </article>
-    </div>
+    <!-- ══════════════════════════════════════════════════════════════
+         ▼▼▼  LES PROCHAINES DATES — MODIFIEZ TOUT ICI  ▼▼▼
+         Un objet { } entre accolades = une date à venir. Sur chaque ligne :
+           · jour    : le numéro du jour (ex. "27")
+           · mois    : le mois en abrégé (ex. "Sept", "Oct", "Déc")
+           · titre   : le nom du rassemblement
+           · lieu    : l'endroit
+           · horaire : les horaires (ex. "09h — 12h")
+         Tant que la liste est vide ( [] ), un message « pas encore de date »
+         s'affiche. Ajoutez une ligne et la carte apparaît automatiquement.
+         Ajouter une date : copiez une ligne, collez-la, changez les valeurs
+         (gardez la virgule en fin de ligne). Retirer : supprimez la ligne.
+         Astuce : quand une date est passée, déplacez-la dans le tableau
+         « Ceux qu'on a déjà organisés » plus bas.
+         ══════════════════════════════════════════════════════════════ -->
+    <script>
+    window.AGM_RASSEMBLEMENTS = [
+      // Exemple (à copier quand vous aurez une date) :
+      // { jour:"27", mois:"Sept", titre:"Cars & Coffee de la Chapelle", lieu:"Parking du complexe sportif, La Chapelle-sur-Erdre", horaire:"09h — 12h" },
+    ];
+    </script>
+
+    <div class="events" id="events"></div>
+    <script>
+    (function(){
+      var box = document.getElementById('events');
+      if (!box) return;
+      var list = window.AGM_RASSEMBLEMENTS || [];
+      function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+      if (!list.length){
+        box.innerHTML = '<div class="ev-empty reveal">'
+          + '<h3>Pas encore de date programmée</h3>'
+          + '<p>La prochaine sortie sera annoncée ici. En attendant, suivez-nous sur les réseaux et découvrez les rassemblements déjà organisés plus bas.</p>'
+          + '</div>';
+        return;
+      }
+      box.innerHTML = list.map(function(e, i){
+        var delay = i * 90;
+        var style = delay ? ' style="--d:'+delay+'ms"' : '';
+        return '<article class="ev reveal"'+style+'>'
+             +   '<div class="date"><span class="d">'+esc(e.jour)+'</span><span class="m">'+esc(e.mois)+'</span></div>'
+             +   '<div><h3>'+esc(e.titre)+'</h3><span class="where">'+esc(e.lieu)+'</span></div>'
+             +   '<span class="hour">'+esc(e.horaire)+'</span>'
+             + '</article>';
+      }).join('');
+    })();
+    </script>
 
     <div class="reveal" style="margin-top:64px">
       <h3 style="font-size:26px;font-stretch:112%">Ceux qu'on a déjà organisés</h3>
