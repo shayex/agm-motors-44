@@ -84,9 +84,9 @@ Chaque membre tient sur une ligne, entre accolades `{ }` :
   virgule en fin de ligne.
 - **Retirer un membre** → supprimez sa ligne entière.
 
-> Le `id` est l'identifiant technique : il sert au « mode édition » de la page
-> et n'apparaît pas à l'écran. Le nom affiché, lui, est le champ `nom` — les
-> deux sont indépendants, donc renommer un membre ne casse jamais sa photo.
+> Le `id` est un identifiant technique interne (il n'apparaît pas à l'écran).
+> Le nom affiché, lui, est le champ `nom` — les deux sont indépendants, donc
+> renommer un membre ne casse jamais sa photo.
 
 Après modification : **Commit changes** → le site se met à jour tout seul.
 (Ou envoyez-moi le changement souhaité, je m'en occupe et je fais la PR.)
@@ -131,13 +131,3 @@ doit être activé :
 
 Une fois Pages activé, chaque photo déposée dans `photos/` ou `partenaires/`
 devient visible par tous les visiteurs, automatiquement.
-
----
-
-## Mode édition sur la page (aperçu personnel)
-
-La page contient aussi un bouton **« Mode édition »** (en bas à droite) qui
-permet d'essayer une photo en un clic. ⚠️ Ces photos-là sont enregistrées
-**uniquement dans votre navigateur** : elles servent d'aperçu et **ne sont pas
-visibles par les autres visiteurs**. Pour publier pour tout le monde, utilisez
-la méthode des dossiers ci-dessus.
