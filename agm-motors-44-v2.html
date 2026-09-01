@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AGM Motors 44 — Rassemblements et convois automobiles à Nantes</title>
+<meta name="description" content="Association nantaise de passionnés d'automobile. Rassemblements en Loire-Atlantique et convois vers les grands rendez-vous de l'Ouest.">
+
+<!--
+  ═══════════════════════════════════════════════════════════════
+  AGM MOTORS 44 — page unique. Tout est dans ce fichier.
+
+  POUR LES PHOTOS DU BUREAU :
+  créez un dossier "photos" à côté de ce fichier et déposez-y
+  vos images carrées (ex. 800x800px) nommées thomas.jpg, marion.jpg…
+  Si une photo est absente, les initiales s'affichent à la place.
+
+  POUR LES LOGOS PARTENAIRES :
+  dossier "partenaires" à côté du fichier, logos en PNG transparent.
+
+  BLOCS À MODIFIER : cherchez  <!-- STAFF -->  <!-- RASSEMBLEMENTS -->
+  <!-- CONVOIS -->  <!-- PARTENAIRES -->  <!-- CONTACT -->
+  Les noms, dates et chiffres sont des EXEMPLES à remplacer.
+  ═══════════════════════════════════════════════════════════════
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#08090C;
+  --bg-2:#0E1116;
+  --surface:#151920;
+  --surface-2:#1C222B;
+  --line:rgba(255,255,255,.09);
+  --line-strong:rgba(255,255,255,.18);
+  --txt:#F2F4F7;
+  --txt-dim:#98A2B0;
+  --accent:#FF4A1C;
+  --accent-2:#FF9838;
+  --glow:rgba(255,74,28,.35);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--txt);
+  font-family:"Inter",system-ui,sans-serif;font-size:17px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+h1,h2,h3,h4,.dsp{font-family:"Archivo",sans-serif;font-weight:800;font-stretch:118%;line-height:1.02;letter-spacing:-.025em;margin:0}
+p{margin:0 0 1em}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 26px}
+.dim{color:var(--txt-dim)}
+
+/* ══════ Animations de base ══════ */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.3,1),transform .8s cubic-bezier(.2,.7,.3,1);transition-delay:var(--d,0ms)}
+.reveal.in{opacity:1;transform:none}
+@keyframes floatUp{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+@keyframes drift{0%{transform:translate(-12%,-8%) scale(1)}50%{transform:translate(10%,6%) scale(1.15)}100%{transform:translate(-12%,-8%) scale(1)}}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
+
+/* ══════ Navigation ══════ */
+.topbar{position:fixed;inset:0 0 auto;z-index:50;transition:background .35s,border-color .35s,backdrop-filter .35s;border-bottom:1px solid transparent}
+.topbar.stuck{background:rgba(8,9,12,.82);backdrop-filter:blur(14px) saturate(140%);border-bottom-color:var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:70px}
+.logo{font-family:"Archivo";font-weight:900;font-stretch:125%;font-size:16px;letter-spacing:.04em;display:flex;align-items:center;gap:9px}
+.logo i{width:9px;height:9px;border-radius:2px;background:var(--accent);box-shadow:0 0 14px var(--glow);font-style:normal}
+.topbar nav{display:flex;gap:4px;font-size:14px;font-weight:500}
+.topbar nav a{padding:9px 14px;border-radius:99px;color:var(--txt-dim);transition:color .25s,background .25s}
+.topbar nav a:hover{color:var(--txt);background:rgba(255,255,255,.06)}
+.nav-cta{padding:10px 18px!important;background:var(--accent);color:#fff!important;font-weight:600;box-shadow:0 6px 22px -6px var(--glow)}
+.nav-cta:hover{background:#FF6136!important;transform:translateY(-1px)}
+@media(max-width:900px){
+  .topbar .wrap{height:auto;padding-top:12px;padding-bottom:12px;flex-wrap:wrap;gap:10px}
+  .topbar nav{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .topbar nav a{white-space:nowrap;padding:7px 11px;font-size:13px}
+}
+
+/* ══════ Hero ══════ */
+.hero{position:relative;padding:190px 0 0;overflow:hidden;isolation:isolate}
+.hero .orb{position:absolute;z-index:-1;border-radius:50%;filter:blur(90px);opacity:.5;animation:drift 26s ease-in-out infinite}
+.orb.a{width:620px;height:620px;background:radial-gradient(circle,#FF4A1C,transparent 65%);top:-180px;right:-140px}
+.orb.b{width:520px;height:520px;background:radial-gradient(circle,#2C6FE8,transparent 65%);top:180px;left:-220px;opacity:.32;animation-duration:34s;animation-direction:reverse}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:
+  linear-gradient(transparent 0,var(--bg) 92%),
+  repeating-linear-gradient(90deg,rgba(255,255,255,.028) 0 1px,transparent 1px 84px)}
+
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:var(--txt-dim);
+  border:1px solid var(--line-strong);border-radius:99px;padding:7px 16px;margin-bottom:30px;
+  animation:floatUp .9s cubic-bezier(.2,.7,.3,1) both}
+.eyebrow b{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2.4s ease-in-out infinite}
+.hero h1{font-size:clamp(50px,10.5vw,128px);font-stretch:125%;font-weight:900;letter-spacing:-.04em;animation:floatUp 1s .1s cubic-bezier(.2,.7,.3,1) both}
+.hero h1 em{font-style:normal;background:linear-gradient(96deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{font-size:clamp(17px,2vw,21px);color:var(--txt-dim);max-width:33em;margin:26px 0 38px;animation:floatUp 1s .22s cubic-bezier(.2,.7,.3,1) both}
+.hero .actions{display:flex;flex-wrap:wrap;gap:12px;animation:floatUp 1s .34s cubic-bezier(.2,.7,.3,1) both}
+
+.btn{display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:99px;font-weight:600;font-size:15px;
+  transition:transform .25s,background .25s,border-color .25s,box-shadow .25s}
+.btn-p{background:var(--accent);color:#fff;box-shadow:0 12px 34px -12px var(--glow)}
+.btn-p:hover{background:#FF6136;transform:translateY(-2px);box-shadow:0 18px 40px -12px var(--glow)}
+.btn-s{border:1px solid var(--line-strong);color:var(--txt)}
+.btn-s:hover{border-color:var(--txt);background:rgba(255,255,255,.05);transform:translateY(-2px)}
+
+/* bandeau défilant */
+.ticker{margin-top:86px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;overflow:hidden;
+  background:linear-gradient(90deg,rgba(255,74,28,.07),transparent 60%)}
+.ticker-track{display:flex;width:max-content;animation:slide 34s linear infinite}
+.ticker span{font-family:"Archivo";font-weight:800;font-stretch:118%;font-size:15px;letter-spacing:.1em;color:var(--txt-dim);padding:0 26px;white-space:nowrap}
+.ticker span::after{content:"◆";color:var(--accent);margin-left:26px;font-size:9px;vertical-align:middle}
+
+/* carte prochain départ */
+.next{margin:64px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px 30px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:18px 40px;position:relative;overflow:hidden}
+.next::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(var(--accent),var(--accent-2))}
+.next .tag{font-size:12px;font-weight:600;letter-spacing:.13em;color:var(--accent);display:flex;align-items:center;gap:8px}
+.next .tag b{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+.next h3{font-size:23px;font-stretch:110%}
+.next .meta{font-size:15px;color:var(--txt-dim)}
+.next .go{margin-left:auto}
+
+/* ══════ Sections ══════ */
+section{padding:120px 0;position:relative}
+.sec-head{margin-bottom:56px;max-width:44em}
+.sec-label{font-size:12px;font-weight:600;letter-spacing:.16em;color:var(--accent);display:block;margin-bottom:16px}
+.sec-head h2{font-size:clamp(34px,5.4vw,60px);font-stretch:125%}
+.sec-head p{color:var(--txt-dim);margin-top:18px;max-width:40em}
+
+/* à propos + compteurs */
+.about{display:grid;grid-template-columns:1.2fr .8fr;gap:64px;align-items:start}
+@media(max-width:900px){.about{grid-template-columns:1fr;gap:40px}}
+.counters{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.counters div{background:var(--bg-2);padding:26px 24px}
+.counters b{display:block;font-family:"Archivo";font-weight:900;font-stretch:118%;font-size:clamp(34px,4.4vw,48px);
+  background:linear-gradient(140deg,#fff,#9AA6B6);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.counters span{font-size:13.5px;color:var(--txt-dim);margin-top:8px;display:block}
+
+/* ══════ STAFF : cartes photo ══════ */
+.crew{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:22px}
+.card{position:relative;border-radius:22px;overflow:hidden;background:var(--surface);border:1px solid var(--line);
+  aspect-ratio:1/1;transition:transform .45s cubic-bezier(.2,.7,.3,1),border-color .45s,box-shadow .45s}
+.card:hover{transform:translateY(-7px);border-color:rgba(255,74,28,.5);box-shadow:0 26px 50px -24px rgba(0,0,0,.9)}
+.card .ph{position:absolute;inset:0;display:grid;place-items:center;
+  background:linear-gradient(150deg,#242C38,#131820);
+  font-family:"Archivo";font-weight:900;font-stretch:125%;font-size:56px;color:rgba(255,255,255,.13);letter-spacing:.04em}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:grayscale(1) contrast(1.06);transition:filter .5s,transform .7s cubic-bezier(.2,.7,.3,1)}
+.card:hover img{filter:grayscale(0);transform:scale(1.06)}
+.card .scrim{position:absolute;inset:0;background:linear-gradient(transparent 38%,rgba(6,7,10,.82) 76%,rgba(6,7,10,.96))}
+.card .info{position:absolute;left:0;right:0;bottom:0;padding:20px}
+.card .role{font-size:11.5px;font-weight:600;letter-spacing:.14em;color:var(--accent);margin-bottom:6px}
+.card h3{font-size:21px;font-stretch:110%}
+.card .bio{font-size:14px;color:var(--txt-dim);line-height:1.45;max-height:0;opacity:0;overflow:hidden;
+  transition:max-height .45s cubic-bezier(.2,.7,.3,1),opacity .35s,margin .45s}
+.card:hover .bio{max-height:100px;opacity:1;margin-top:9px}
+@media(hover:none){.card .bio{max-height:100px;opacity:1;margin-top:9px}}
+
+/* ══════ Événements ══════ */
+.events{display:grid;gap:14px}
+.ev{display:grid;grid-template-columns:96px 1fr auto;gap:28px;align-items:center;
+  background:var(--bg-2);border:1px solid var(--line);border-radius:18px;padding:22px 26px;
+  transition:transform .35s,border-color .35s,background .35s}
+.ev:hover{transform:translateX(6px);border-color:rgba(255,74,28,.45);background:var(--surface)}
+.ev .date{text-align:center;border-right:1px solid var(--line);padding-right:20px}
+.ev .date .d{display:block;font-family:"Archivo";font-weight:900;font-stretch:125%;font-size:42px;line-height:1}
+.ev .date .m{font-size:12px;font-weight:600;letter-spacing:.13em;color:var(--accent)}
+.ev h3{font-size:22px;margin-bottom:5px;font-stretch:110%}
+.ev .where{font-size:15px;color:var(--txt-dim)}
+.ev .hour{font-family:"Archivo";font-weight:700;font-size:16px;white-space:nowrap;color:var(--txt-dim)}
+@media(max-width:720px){
+  .ev{grid-template-columns:72px 1fr;gap:18px;padding:18px}
+  .ev .date{padding-right:14px}.ev .date .d{font-size:32px}
+  .ev .hour{grid-column:2;font-size:14px}
+}
+
+/* archives */
+.archive{width:100%;border-collapse:collapse;margin-top:22px}
+.archive th{text-align:left;font-family:"Archivo";font-size:11.5px;font-weight:700;letter-spacing:.14em;color:var(--txt-dim);
+  padding:0 0 14px;border-bottom:1px solid var(--line-strong)}
+.archive td{padding:16px 0;border-bottom:1px solid var(--line);font-size:16px}
+.archive tr{transition:background .3s}
+.archive tbody tr:hover{background:rgba(255,255,255,.03)}
+.archive td:first-child{font-family:"Archivo";font-weight:600;font-size:14px;color:var(--txt-dim);white-space:nowrap;padding-right:26px}
+.archive td:last-child{text-align:right;font-family:"Archivo";font-weight:700;font-size:15px;color:var(--accent)}
+@media(max-width:640px){.archive th:nth-child(3),.archive td:nth-child(3){display:none}}
+
+/* ══════ Convois ══════ */
+.convoy{background:var(--bg-2);border:1px solid var(--line);border-radius:22px;padding:30px 32px;margin-bottom:16px;
+  transition:border-color .4s,background .4s}
+.convoy:hover{border-color:var(--line-strong);background:var(--surface)}
+.convoy.done{opacity:.72}
+.convoy.done:hover{opacity:1}
+.cv-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:10px 24px;margin-bottom:26px}
+.cv-top h3{font-size:25px;font-stretch:112%}
+.cv-when{font-family:"Archivo";font-weight:700;font-size:14px;letter-spacing:.06em;color:var(--accent);
+  border:1px solid rgba(255,74,28,.4);border-radius:99px;padding:6px 15px}
+.convoy.done .cv-when{color:var(--txt-dim);border-color:var(--line)}
+
+.route{list-style:none;margin:0 0 24px;padding:0 0 0 30px;position:relative}
+.route::before{content:"";position:absolute;left:6px;top:10px;bottom:10px;width:2px;
+  background:linear-gradient(var(--accent),var(--accent-2));opacity:.55}
+.convoy.done .route::before{background:var(--line-strong)}
+.route li{position:relative;padding-bottom:18px;font-size:16.5px;line-height:1.4}
+.route li:last-child{padding-bottom:0}
+.route li::before{content:"";position:absolute;left:-30px;top:6px;width:14px;height:14px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--accent)}
+.convoy.done .route li::before{border-color:var(--txt-dim)}
+.route li.end::before{background:var(--accent);box-shadow:0 0 0 5px rgba(255,74,28,.16)}
+.convoy.done .route li.end::before{background:var(--txt-dim);box-shadow:none}
+.route .h{font-family:"Archivo";font-weight:700;font-size:14.5px;color:var(--accent);margin-right:12px}
+.convoy.done .route .h{color:var(--txt-dim)}
+.route .sub{display:block;font-size:14.5px;color:var(--txt-dim)}
+.cv-stats{display:flex;flex-wrap:wrap;gap:14px}
+.cv-stats div{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:11px 17px;font-size:12.5px;color:var(--txt-dim)}
+.cv-stats b{display:block;font-family:"Archivo";font-weight:800;font-size:19px;color:var(--txt);line-height:1.25}
+
+/* ══════ PARTENAIRES ══════ */
+.marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;margin-bottom:52px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.marquee-track{display:flex;width:max-content;align-items:center;animation:slide 30s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee span{font-family:"Archivo";font-weight:800;font-stretch:118%;font-size:20px;color:var(--txt-dim);
+  padding:0 34px;white-space:nowrap;opacity:.55;transition:opacity .3s,color .3s}
+.marquee span:hover{opacity:1;color:var(--accent)}
+
+.partners{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.partner{background:var(--bg-2);border:1px solid var(--line);border-radius:18px;padding:26px;position:relative;overflow:hidden;
+  transition:transform .4s,border-color .4s,background .4s}
+.partner::before{content:"";position:absolute;inset:0;background:radial-gradient(300px 120px at 20% 0%,rgba(255,74,28,.14),transparent 70%);
+  opacity:0;transition:opacity .45s}
+.partner:hover{transform:translateY(-5px);border-color:rgba(255,74,28,.4);background:var(--surface)}
+.partner:hover::before{opacity:1}
+.partner .mark{width:56px;height:56px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line);
+  display:grid;place-items:center;font-family:"Archivo";font-weight:900;font-size:19px;color:var(--txt-dim);margin-bottom:18px;overflow:hidden}
+.partner .mark img{width:100%;height:100%;object-fit:contain;padding:8px}
+.partner h3{font-size:19px;font-stretch:108%;position:relative}
+.partner .kind{font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--accent);margin-top:7px;position:relative}
+.partner p{font-size:14.5px;color:var(--txt-dim);margin:12px 0 0;position:relative;line-height:1.5}
+
+.partner-cta{grid-column:1/-1;border:1px dashed var(--line-strong);border-radius:18px;padding:34px;text-align:center;background:transparent}
+.partner-cta h3{font-size:22px;margin-bottom:10px}
+.partner-cta p{color:var(--txt-dim);max-width:46em;margin:0 auto 20px;font-size:15.5px}
+
+/* ══════ Contact ══════ */
+.contact{position:relative;overflow:hidden;background:var(--bg-2);border-top:1px solid var(--line)}
+.contact::before{content:"";position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(110px);opacity:.28;
+  background:radial-gradient(circle,var(--accent),transparent 65%);top:-360px;left:50%;transform:translateX(-50%)}
+.contact .wrap{position:relative;text-align:center}
+.contact h2{font-size:clamp(36px,6vw,68px);font-stretch:125%}
+.contact p{color:var(--txt-dim);max-width:36em;margin:22px auto 34px}
+.contact .actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+
+footer{border-top:1px solid var(--line);padding:30px 0;font-size:13.5px;color:var(--txt-dim)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+
+a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:.01ms!important}
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar" id="topbar">
+  <div class="wrap">
+    <a href="#" class="logo"><i></i>AGM MOTORS 44</a>
+    <nav>
+      <a href="#asso">L'association</a>
+      <a href="#staff">Le bureau</a>
+      <a href="#rassemblements">Rassemblements</a>
+      <a href="#convois">Convois</a>
+      <a href="#partenaires">Partenaires</a>
+      <a href="#contact" class="nav-cta">Nous rejoindre</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <span class="orb a"></span><span class="orb b"></span>
+  <div class="wrap">
+    <span class="eyebrow"><b></b> Association loi 1901 · Nantes, Loire-Atlantique</span>
+    <h1>On sort les<br>voitures du <em>garage</em>.</h1>
+    <p class="lede">Rassemblements automobiles en Loire-Atlantique et convois organisés vers les grands rendez-vous de l'Ouest. Youngtimers, sportives, préparations : on ne trie pas, on roule ensemble.</p>
+    <div class="actions">
+      <a href="#rassemblements" class="btn btn-p">Voir les prochaines dates</a>
+      <a href="#convois" class="btn btn-s">Nos convois</a>
+    </div>
+
+    <div class="next">
+      <div>
+        <div class="tag"><b></b>PROCHAIN DÉPART</div>
+        <h3>Le Mans Classic</h3>
+      </div>
+      <div class="meta">Samedi 12 septembre · rendez-vous 07h00<br>Parking Atlantis, Saint-Herblain</div>
+      <a href="#convois" class="btn btn-s go">Détails du convoi</a>
+    </div>
+  </div>
+
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>RASSEMBLEMENTS</span><span>CONVOIS</span><span>NANTES 44</span><span>YOUNGTIMERS</span><span>SPORTIVES</span><span>PRÉPARATIONS</span>
+      <span>RASSEMBLEMENTS</span><span>CONVOIS</span><span>NANTES 44</span><span>YOUNGTIMERS</span><span>SPORTIVES</span><span>PRÉPARATIONS</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ L'ASSOCIATION ============ -->
+<section id="asso">
+  <div class="wrap">
+    <div class="about">
+      <div class="reveal">
+        <span class="sec-label">L'ASSOCIATION</span>
+        <h2 style="font-size:clamp(34px,5.4vw,58px);font-stretch:125%">Née sur un parking, un samedi soir</h2>
+        <p style="margin-top:24px">Quelques voitures garées au même endroit, des discussions qui durent, et l'envie de recommencer la semaine suivante. AGM Motors 44 est partie de là. Aujourd'hui l'association réunit des passionnés de toute la Loire-Atlantique autour de deux activités simples.</p>
+        <p>Les <strong>rassemblements</strong> : on réserve un lieu autour de Nantes, on ouvre les portes, chacun vient exposer sa voiture le temps d'une matinée ou d'une soirée. L'entrée est libre, membre ou non.</p>
+        <p>Les <strong>convois</strong> : on part groupés vers les grands événements de la région. Briefing avant le départ, itinéraire préparé, pauses prévues, une voiture ouvreuse et une voiture qui ferme la marche. Personne ne reste sur le bord de la route.</p>
+      </div>
+      <div class="counters reveal" style="--d:120ms">
+        <div><b data-count="2021" data-plain="1">2021</b><span>Année de création</span></div>
+        <div><b data-count="128">0</b><span>Membres</span></div>
+        <div><b data-count="19">0</b><span>Rassemblements organisés</span></div>
+        <div><b data-count="11">0</b><span>Convois menés</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAFF ============ -->
+<section id="staff">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-label">LE BUREAU</span>
+      <h2>Les têtes de l'association</h2>
+      <p>Les personnes à qui parler sur place, au départ d'un convoi ou à l'entrée d'un rassemblement.</p>
+    </div>
+
+    <div class="crew">
+
+      <!-- Une carte = un membre. Remplacez src, le nom, la fonction et la description.
+           Si la photo n'existe pas, les initiales du bloc .ph s'affichent. -->
+      <article class="card reveal">
+        <div class="ph">TL</div>
+        <img src="photos/thomas.jpg" alt="Thomas L." onerror="this.remove()">
+        <div class="scrim"></div>
+        <div class="info">
+          <div class="role">PRÉSIDENT</div>
+          <h3>Thomas L.</h3>
+          <p class="bio">Fondateur. Il négocie les lieux, parle aux mairies et ouvre le portail le matin.</p>
+        </div>
+      </article>
+
+      <article class="card reveal" style="--d:80ms">
+        <div class="ph">MB</div>
+        <img src="photos/marion.jpg" alt="Marion B." onerror="this.remove()">
+        <div class="scrim"></div>
+        <div class="info">
+          <div class="role">VICE-PRÉSIDENTE</div>
+          <h3>Marion B.</h3>
+          <p class="bio">Elle trace les itinéraires de convoi, repère les pauses et gère les inscriptions.</p>
+        </div>
+      </article>
+
+      <article class="card reveal" style="--d:160ms">
+        <div class="ph">KD</div>
+        <img src="photos/kevin.jpg" alt="Kévin D." onerror="this.remove()">
+        <div class="scrim"></div>
+        <div class="info">
+          <div class="role">TRÉSORIER</div>
+          <h3>Kévin D.</h3>
+          <p class="bio">Cotisations, assurance, budget des événements. Il remet les cartes de membre.</p>
+        </div>
+      </article>
+
+      <article class="card reveal" style="--d:240ms">
+        <div class="ph">SA</div>
+        <img src="photos/sarah.jpg" alt="Sarah A." onerror="this.remove()">
+        <div class="scrim"></div>
+        <div class="info">
+          <div class="role">SECRÉTAIRE</div>
+          <h3>Sarah A.</h3>
+          <p class="bio">Comptes rendus, déclarations en préfecture et réponses aux messages reçus.</p>
+        </div>
+      </article>
+
+      <article class="card reveal" style="--d:320ms">
+        <div class="ph">JM</div>
+        <img src="photos/julien.jpg" alt="Julien M." onerror="this.remove()">
+        <div class="scrim"></div>
+        <div class="info">
+          <div class="role">RESPONSABLE CONVOIS</div>
+          <h3>Julien M.</h3>
+          <p class="bio">Voiture ouvreuse. Il fait le briefing sécurité et donne le rythme du groupe.</p>
+        </div>
+      </article>
+
+      <article class="card reveal" style="--d:400ms">
+        <div class="ph">NR</div>
+        <img src="photos/noe.jpg" alt="Noé R." onerror="this.remove()">
+        <div class="scrim"></div>
+        <div class="info">
+          <div class="role">PHOTO ET RÉSEAUX</div>
+          <h3>Noé R.</h3>
+          <p class="bio">Il couvre chaque sortie et publie les albums dans la semaine qui suit.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ RASSEMBLEMENTS ============ -->
+<section id="rassemblements">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-label">RASSEMBLEMENTS</span>
+      <h2>Les prochaines dates</h2>
+      <p>Entrée libre pour les visiteurs comme pour les exposants. Pas besoin d'être membre pour venir.</p>
+    </div>
+
+    <div class="events">
+      <article class="ev reveal">
+        <div class="date"><span class="d">27</span><span class="m">SEPT</span></div>
+        <div><h3>Cars &amp; Coffee de la Chapelle</h3><span class="where">Parking du complexe sportif, La Chapelle-sur-Erdre</span></div>
+        <span class="hour">09h — 12h</span>
+      </article>
+      <article class="ev reveal" style="--d:90ms">
+        <div class="date"><span class="d">18</span><span class="m">OCT</span></div>
+        <div><h3>Rassemblement d'automne</h3><span class="where">Zone du Bois Cesbron, Orvault</span></div>
+        <span class="hour">10h — 17h</span>
+      </article>
+      <article class="ev reveal" style="--d:180ms">
+        <div class="date"><span class="d">13</span><span class="m">DÉC</span></div>
+        <div><h3>Sortie de Noël et collecte de jouets</h3><span class="where">Place du Bouffay, Nantes</span></div>
+        <span class="hour">14h — 19h</span>
+      </article>
+    </div>
+
+    <div class="reveal" style="margin-top:64px">
+      <h3 style="font-size:26px;font-stretch:112%">Ceux qu'on a déjà organisés</h3>
+      <table class="archive">
+        <thead><tr><th>DATE</th><th>RASSEMBLEMENT</th><th>LIEU</th><th>VÉHICULES</th></tr></thead>
+        <tbody>
+          <tr><td>Juin 2026</td><td>Grand rassemblement d'été</td><td>Hippodrome de Nantes</td><td>210</td></tr>
+          <tr><td>Avril 2026</td><td>Cars &amp; Coffee de printemps</td><td>Saint-Herblain</td><td>95</td></tr>
+          <tr><td>Février 2026</td><td>Sortie hivernale</td><td>Vertou</td><td>60</td></tr>
+          <tr><td>Novembre 2025</td><td>Rassemblement caritatif Téléthon</td><td>Rezé</td><td>140</td></tr>
+          <tr><td>Septembre 2025</td><td>Rentrée des moteurs</td><td>Carquefou</td><td>120</td></tr>
+          <tr><td>Juillet 2025</td><td>Soirée d'été</td><td>Bord de Loire, Nantes</td><td>85</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONVOIS ============ -->
+<section id="convois">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-label">CONVOIS</span>
+      <h2>On y va ensemble</h2>
+      <p>Le point de rendez-vous est annoncé une semaine avant. Plein fait avant l'heure de départ, allure raisonnable, limitations respectées.</p>
+    </div>
+
+    <article class="convoy reveal">
+      <div class="cv-top"><h3>Direction Le Mans Classic</h3><span class="cv-when">SAM. 12 SEPTEMBRE</span></div>
+      <ul class="route">
+        <li><span class="h">07h00</span>Parking Atlantis, Saint-Herblain<span class="sub">Briefing et vérification des pleins</span></li>
+        <li><span class="h">07h30</span>Départ du convoi<span class="sub">Par la N23, allure tranquille</span></li>
+        <li><span class="h">09h00</span>Pause café, aire de La Flèche</li>
+        <li class="end"><span class="h">10h30</span>Arrivée au circuit Bugatti, Le Mans</li>
+      </ul>
+      <div class="cv-stats">
+        <div><b>185 km</b>distance</div><div><b>3 h 30</b>avec pause</div><div><b>32</b>places réservées</div>
+      </div>
+    </article>
+
+    <article class="convoy reveal" style="--d:90ms">
+      <div class="cv-top"><h3>Épopée vendéenne, Les Sables-d'Olonne</h3><span class="cv-when">DIM. 4 OCTOBRE</span></div>
+      <ul class="route">
+        <li><span class="h">08h15</span>Péage de Nantes-Sud, A83</li>
+        <li><span class="h">08h45</span>Départ du convoi</li>
+        <li class="end"><span class="h">10h00</span>Arrivée sur le remblai des Sables-d'Olonne</li>
+      </ul>
+      <div class="cv-stats">
+        <div><b>105 km</b>distance</div><div><b>1 h 45</b>trajet</div><div><b>Ouvert</b>inscriptions</div>
+      </div>
+    </article>
+
+    <h3 class="reveal" style="font-size:26px;font-stretch:112%;margin:64px 0 24px">Convois déjà réalisés</h3>
+
+    <article class="convoy done reveal">
+      <div class="cv-top"><h3>Rétromobile de l'Ouest, Angers</h3><span class="cv-when">MAI 2026</span></div>
+      <ul class="route">
+        <li><span class="h">08h00</span>Départ de Carquefou</li>
+        <li><span class="h">09h20</span>Pause à Ancenis, bord de Loire</li>
+        <li class="end"><span class="h">10h30</span>Parc des expositions d'Angers</li>
+      </ul>
+      <div class="cv-stats"><div><b>98 km</b>distance</div><div><b>41</b>véhicules</div></div>
+    </article>
+
+    <article class="convoy done reveal" style="--d:90ms">
+      <div class="cv-top"><h3>Tour du vignoble nantais</h3><span class="cv-when">MARS 2026</span></div>
+      <ul class="route">
+        <li><span class="h">09h30</span>Départ de Vertou</li>
+        <li><span class="h">11h00</span>Clisson, place du Minage</li>
+        <li class="end"><span class="h">12h30</span>Déjeuner au Loroux-Bottereau</li>
+      </ul>
+      <div class="cv-stats"><div><b>72 km</b>boucle</div><div><b>28</b>véhicules</div></div>
+    </article>
+
+    <article class="convoy done reveal" style="--d:180ms">
+      <div class="cv-top"><h3>24 Heures du Mans</h3><span class="cv-when">JUIN 2025</span></div>
+      <ul class="route">
+        <li><span class="h">06h00</span>Départ de Saint-Herblain</li>
+        <li><span class="h">07h45</span>Pause, aire de Sablé-sur-Sarthe</li>
+        <li class="end"><span class="h">09h15</span>Circuit des 24 Heures, Le Mans</li>
+      </ul>
+      <div class="cv-stats"><div><b>190 km</b>distance</div><div><b>54</b>véhicules</div><div><b>Record</b>plus gros convoi</div></div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ PARTENAIRES ============ -->
+<section id="partenaires">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-label">PARTENAIRES</span>
+      <h2>Ceux qui roulent avec nous</h2>
+      <p>Garages, préparateurs et commerces de la région qui soutiennent l'association, accueillent nos rassemblements ou proposent des tarifs à nos membres.</p>
+    </div>
+  </div>
+
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>GARAGE DE L'ERDRE</span><span>ATLANTIC PERFORMANCE</span><span>CARROSSERIE SÈVRE</span><span>DETAILING NANTES</span><span>PNEUS LOIRE OUEST</span><span>CAFÉ DU CIRCUIT</span>
+      <span>GARAGE DE L'ERDRE</span><span>ATLANTIC PERFORMANCE</span><span>CARROSSERIE SÈVRE</span><span>DETAILING NANTES</span><span>PNEUS LOIRE OUEST</span><span>CAFÉ DU CIRCUIT</span>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="partners">
+
+      <!-- Un bloc = un partenaire. Pour un logo : remplacez le texte du .mark par
+           <img src="partenaires/nom.png" alt="Nom du partenaire"> -->
+      <article class="partner reveal">
+        <div class="mark">GE</div>
+        <h3>Garage de l'Erdre</h3>
+        <div class="kind">MÉCANIQUE</div>
+        <p>Entretien et préparation. Tarif préférentiel sur la main-d'œuvre pour les membres.</p>
+      </article>
+
+      <article class="partner reveal" style="--d:70ms">
+        <div class="mark">AP</div>
+        <h3>Atlantic Performance</h3>
+        <div class="kind">PRÉPARATION</div>
+        <p>Banc de puissance et optimisation moteur. Ils accueillent une journée dyno par an.</p>
+      </article>
+
+      <article class="partner reveal" style="--d:140ms">
+        <div class="mark">CS</div>
+        <h3>Carrosserie Sèvre</h3>
+        <div class="kind">CARROSSERIE</div>
+        <p>Peinture et restauration. Partenaire de nos rassemblements de printemps.</p>
+      </article>
+
+      <article class="partner reveal" style="--d:210ms">
+        <div class="mark">DN</div>
+        <h3>Detailing Nantes</h3>
+        <div class="kind">ESTHÉTIQUE</div>
+        <p>Lavage et protection céramique. Démonstration sur place à chaque grand rassemblement.</p>
+      </article>
+
+      <article class="partner reveal" style="--d:280ms">
+        <div class="mark">PL</div>
+        <h3>Pneus Loire Ouest</h3>
+        <div class="kind">PNEUMATIQUES</div>
+        <p>Montage et géométrie. Contrôle gratuit avant chaque départ en convoi.</p>
+      </article>
+
+      <article class="partner reveal" style="--d:350ms">
+        <div class="mark">CC</div>
+        <h3>Café du Circuit</h3>
+        <div class="kind">RESTAURATION</div>
+        <p>Notre point de rendez-vous du samedi matin. Café offert aux membres avant le départ.</p>
+      </article>
+
+      <div class="partner-cta reveal">
+        <h3>Devenir partenaire</h3>
+        <p>Vous êtes un professionnel de l'automobile en Loire-Atlantique et vous voulez être visible auprès de nos membres et des visiteurs de nos rassemblements ? On vous explique comment ça marche.</p>
+        <a href="#contact" class="btn btn-p">Nous contacter</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <h2 class="reveal">Venez rouler avec nous</h2>
+    <p class="reveal" style="--d:80ms">L'adhésion se fait sur place lors d'un rassemblement ou par message. Vous pouvez aussi venir voir à quoi ça ressemble avant de vous décider, nos événements sont ouverts à tout le monde.</p>
+    <div class="actions reveal" style="--d:160ms">
+      <a class="btn btn-p" href="mailto:contact@agmmotors44.fr">contact@agmmotors44.fr</a>
+      <a class="btn btn-s" href="https://instagram.com/">Instagram</a>
+      <a class="btn btn-s" href="https://facebook.com/">Facebook</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>AGM Motors 44 — association loi 1901, Nantes</span>
+    <span>Rassemblements et convois en Loire-Atlantique</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* barre de navigation au scroll */
+  var bar = document.getElementById('topbar');
+  var onScroll = function(){ bar.classList.toggle('stuck', window.scrollY > 30); };
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+  if (reduce){
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    document.querySelectorAll('[data-count]').forEach(function(el){ el.textContent = el.dataset.count; });
+    return;
+  }
+
+  /* apparition des blocs au scroll */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:.14, rootMargin:'0px 0px -60px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  /* compteurs animés */
+  var co = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      co.unobserve(e.target);
+      var el = e.target, target = parseInt(el.dataset.count, 10);
+      if (el.dataset.plain){ el.textContent = target; return; }
+      var start = null, dur = 1400;
+      var step = function(ts){
+        if (!start) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+  }, {threshold:.5});
+  document.querySelectorAll('[data-count]').forEach(function(el){ co.observe(el); });
+})();
+</script>
+
+</body>
+</html>
