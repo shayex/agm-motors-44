@@ -10,12 +10,21 @@
   ═══════════════════════════════════════════════════════════════
   AGM MOTORS 44 — page unique. Tout est dans ce fichier.
 
-  POUR LES PHOTOS DU BUREAU :
+  AJOUT MANUEL DES PHOTOS (le plus simple) :
+  en bas à droite de la page, cliquez sur « Mode édition ». Un bouton
+  « Photo » apparaît sur chaque membre du bureau et chaque partenaire :
+  choisissez une image depuis votre ordinateur ou votre téléphone.
+  Elle est redimensionnée puis mémorisée DANS CE NAVIGATEUR.
+  ⚠ Ces photos ne sont visibles que sur l'appareil où vous les ajoutez.
+  Pour des photos visibles par TOUS les visiteurs, utilisez les dossiers
+  ci-dessous (une photo ajoutée en mode édition ne change rien pour eux).
+
+  POUR LES PHOTOS DU BUREAU (visibles par tous) :
   créez un dossier "photos" à côté de ce fichier et déposez-y
   vos images carrées (ex. 800x800px) nommées thomas.jpg, marion.jpg…
   Si une photo est absente, les initiales s'affichent à la place.
 
-  POUR LES LOGOS PARTENAIRES :
+  POUR LES LOGOS PARTENAIRES (visibles par tous) :
   dossier "partenaires" à côté du fichier, logos en PNG transparent.
 
   BLOCS À MODIFIER : cherchez  <!-- STAFF -->  <!-- RASSEMBLEMENTS -->
@@ -260,6 +269,45 @@ footer{border-top:1px solid var(--line);padding:30px 0;font-size:13.5px;color:va
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 
 a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
+
+/* ══════ Ajout manuel des photos (mode édition) ══════ */
+/* Bouton flottant pour activer/désactiver le mode édition */
+.edit-toggle{position:fixed;right:20px;bottom:20px;z-index:80;display:inline-flex;align-items:center;gap:9px;
+  padding:12px 18px;border-radius:99px;border:1px solid var(--line-strong);background:rgba(14,17,22,.9);
+  backdrop-filter:blur(12px);color:var(--txt);font-family:"Inter",sans-serif;font-size:13.5px;font-weight:600;
+  cursor:pointer;box-shadow:0 10px 30px -12px rgba(0,0,0,.8);transition:transform .25s,border-color .25s,background .25s}
+.edit-toggle:hover{transform:translateY(-2px);border-color:var(--txt)}
+.edit-toggle i{width:8px;height:8px;border-radius:50%;background:var(--txt-dim);font-style:normal;transition:background .25s,box-shadow .25s}
+body.editing .edit-toggle{border-color:var(--accent);background:var(--accent);color:#fff}
+body.editing .edit-toggle i{background:#fff;box-shadow:0 0 10px rgba(255,255,255,.7)}
+
+/* Bandeau d'aide affiché en mode édition */
+.edit-hint{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:80;display:none;
+  max-width:calc(100vw - 40px);padding:10px 18px;border-radius:99px;border:1px solid rgba(255,74,28,.4);
+  background:rgba(14,17,22,.92);backdrop-filter:blur(12px);color:var(--txt-dim);font-size:13px;text-align:center}
+body.editing .edit-hint{display:block}
+@media(max-width:720px){.edit-hint{display:none!important}}
+
+/* Boutons d'action sur chaque carte, cachés hors mode édition */
+.photo-edit-btn,.photo-remove-btn{position:absolute;z-index:6;border:none;cursor:pointer;font-family:"Inter",sans-serif;
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s,background .25s}
+body.editing .photo-edit-btn,body.editing .photo-remove-btn{opacity:1;pointer-events:auto}
+.photo-edit-btn{top:12px;left:12px;display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:99px;
+  background:var(--accent);color:#fff;font-size:12.5px;font-weight:600;box-shadow:0 6px 18px -6px var(--glow)}
+.photo-edit-btn:hover{background:#FF6136;transform:translateY(-1px)}
+.photo-remove-btn{top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(8,9,12,.85);
+  border:1px solid var(--line-strong);color:var(--txt);font-size:18px;line-height:1;display:none;place-items:center}
+.photo-remove-btn:hover{border-color:var(--accent);color:var(--accent)}
+body.editing [data-photo-id].has-photo .photo-remove-btn{display:grid}
+/* Sur les partenaires, la vignette est petite : on décale les boutons */
+.partner{position:relative}
+.partner .photo-edit-btn{top:10px;left:auto;right:10px;padding:6px 11px;font-size:12px}
+.partner .photo-remove-btn{top:10px;right:auto;left:10px;width:26px;height:26px;font-size:16px}
+body.editing .partner{border-color:rgba(255,74,28,.35)}
+body.editing .card{outline:1px dashed rgba(255,74,28,.35);outline-offset:-1px}
+/* La photo/logo d'un partenaire recouvre les initiales de la vignette */
+.partner .mark{position:relative}
+.partner .mark img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8px;background:var(--surface-2)}
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition-duration:.01ms!important}
   html{scroll-behavior:auto}
@@ -347,7 +395,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
 
       <!-- Une carte = un membre. Remplacez src, le nom, la fonction et la description.
            Si la photo n'existe pas, les initiales du bloc .ph s'affichent. -->
-      <article class="card reveal">
+      <article class="card reveal" data-photo-id="thomas" data-photo-type="crew">
         <div class="ph">TL</div>
         <img src="photos/thomas.jpg" alt="Thomas L." onerror="this.remove()">
         <div class="scrim"></div>
@@ -358,7 +406,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
         </div>
       </article>
 
-      <article class="card reveal" style="--d:80ms">
+      <article class="card reveal" style="--d:80ms" data-photo-id="marion" data-photo-type="crew">
         <div class="ph">MB</div>
         <img src="photos/marion.jpg" alt="Marion B." onerror="this.remove()">
         <div class="scrim"></div>
@@ -369,7 +417,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
         </div>
       </article>
 
-      <article class="card reveal" style="--d:160ms">
+      <article class="card reveal" style="--d:160ms" data-photo-id="kevin" data-photo-type="crew">
         <div class="ph">KD</div>
         <img src="photos/kevin.jpg" alt="Kévin D." onerror="this.remove()">
         <div class="scrim"></div>
@@ -380,7 +428,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
         </div>
       </article>
 
-      <article class="card reveal" style="--d:240ms">
+      <article class="card reveal" style="--d:240ms" data-photo-id="sarah" data-photo-type="crew">
         <div class="ph">SA</div>
         <img src="photos/sarah.jpg" alt="Sarah A." onerror="this.remove()">
         <div class="scrim"></div>
@@ -391,7 +439,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
         </div>
       </article>
 
-      <article class="card reveal" style="--d:320ms">
+      <article class="card reveal" style="--d:320ms" data-photo-id="julien" data-photo-type="crew">
         <div class="ph">JM</div>
         <img src="photos/julien.jpg" alt="Julien M." onerror="this.remove()">
         <div class="scrim"></div>
@@ -402,7 +450,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
         </div>
       </article>
 
-      <article class="card reveal" style="--d:400ms">
+      <article class="card reveal" style="--d:400ms" data-photo-id="noe" data-photo-type="crew">
         <div class="ph">NR</div>
         <img src="photos/noe.jpg" alt="Noé R." onerror="this.remove()">
         <div class="scrim"></div>
@@ -551,42 +599,42 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
 
       <!-- Un bloc = un partenaire. Pour un logo : remplacez le texte du .mark par
            <img src="partenaires/nom.png" alt="Nom du partenaire"> -->
-      <article class="partner reveal">
+      <article class="partner reveal" data-photo-id="garage-erdre" data-photo-type="partner">
         <div class="mark">GE</div>
         <h3>Garage de l'Erdre</h3>
         <div class="kind">MÉCANIQUE</div>
         <p>Entretien et préparation. Tarif préférentiel sur la main-d'œuvre pour les membres.</p>
       </article>
 
-      <article class="partner reveal" style="--d:70ms">
+      <article class="partner reveal" style="--d:70ms" data-photo-id="atlantic-performance" data-photo-type="partner">
         <div class="mark">AP</div>
         <h3>Atlantic Performance</h3>
         <div class="kind">PRÉPARATION</div>
         <p>Banc de puissance et optimisation moteur. Ils accueillent une journée dyno par an.</p>
       </article>
 
-      <article class="partner reveal" style="--d:140ms">
+      <article class="partner reveal" style="--d:140ms" data-photo-id="carrosserie-sevre" data-photo-type="partner">
         <div class="mark">CS</div>
         <h3>Carrosserie Sèvre</h3>
         <div class="kind">CARROSSERIE</div>
         <p>Peinture et restauration. Partenaire de nos rassemblements de printemps.</p>
       </article>
 
-      <article class="partner reveal" style="--d:210ms">
+      <article class="partner reveal" style="--d:210ms" data-photo-id="detailing-nantes" data-photo-type="partner">
         <div class="mark">DN</div>
         <h3>Detailing Nantes</h3>
         <div class="kind">ESTHÉTIQUE</div>
         <p>Lavage et protection céramique. Démonstration sur place à chaque grand rassemblement.</p>
       </article>
 
-      <article class="partner reveal" style="--d:280ms">
+      <article class="partner reveal" style="--d:280ms" data-photo-id="pneus-loire-ouest" data-photo-type="partner">
         <div class="mark">PL</div>
         <h3>Pneus Loire Ouest</h3>
         <div class="kind">PNEUMATIQUES</div>
         <p>Montage et géométrie. Contrôle gratuit avant chaque départ en convoi.</p>
       </article>
 
-      <article class="partner reveal" style="--d:350ms">
+      <article class="partner reveal" style="--d:350ms" data-photo-id="cafe-circuit" data-photo-type="partner">
         <div class="mark">CC</div>
         <h3>Café du Circuit</h3>
         <div class="kind">RESTAURATION</div>
@@ -615,6 +663,13 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
     </div>
   </div>
 </section>
+
+<!-- Mode édition : ajout manuel des photos (bureau + partenaires) -->
+<button type="button" class="edit-toggle" id="editToggle" aria-pressed="false">
+  <i></i><span>Mode édition</span>
+</button>
+<div class="edit-hint" id="editHint">Cliquez sur « Photo » pour ajouter une image, sur « × » pour la retirer.</div>
+<input type="file" id="photoInput" accept="image/*" hidden>
 
 <footer>
   <div class="wrap">
@@ -664,6 +719,156 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
     });
   }, {threshold:.5});
   document.querySelectorAll('[data-count]').forEach(function(el){ co.observe(el); });
+})();
+</script>
+
+<!-- ══════ Ajout manuel des photos — membres et prestataires ══════
+     Les photos ajoutées ici sont redimensionnées puis enregistrées dans
+     CE navigateur (localStorage). Elles sont donc visibles sur cet appareil.
+     Pour des photos visibles par TOUS les visiteurs, déposez les fichiers
+     dans les dossiers "photos/" et "partenaires/" (voir en haut du fichier). -->
+<script>
+(function(){
+  var PREFIX = 'agm-photo-';
+  var MODE_KEY = 'agm-edit-mode';
+  var MAX_SIDE = 800;          // côté max de l'image stockée (px)
+  var JPEG_QUALITY = 0.85;
+
+  function readStore(id){ try{ return localStorage.getItem(PREFIX+id); }catch(e){ return null; } }
+  function writeStore(id, val){
+    try{ localStorage.setItem(PREFIX+id, val); return true; }
+    catch(e){ alert("Impossible d'enregistrer la photo : la mémoire du navigateur est pleine. Essayez une image plus petite ou retirez d'anciennes photos."); return false; }
+  }
+  function clearStore(id){ try{ localStorage.removeItem(PREFIX+id); }catch(e){} }
+
+  // Renvoie l'élément <img> de la carte, en le créant si besoin
+  function getImg(article){
+    if (article.dataset.photoType === 'partner'){
+      var mark = article.querySelector('.mark');
+      var img = mark.querySelector('img');
+      if (!img){ img = document.createElement('img'); mark.appendChild(img); }
+      return img;
+    }
+    var cimg = article.querySelector('img');
+    if (!cimg){
+      cimg = document.createElement('img');
+      var scrim = article.querySelector('.scrim');
+      article.insertBefore(cimg, scrim || article.firstChild);
+    }
+    return cimg;
+  }
+
+  function labelFor(article){
+    var h = article.querySelector('h3');
+    return h ? h.textContent.trim() : 'Photo';
+  }
+
+  function applyPhoto(article, dataUrl){
+    var img = getImg(article);
+    img.onerror = null;                 // ne pas se supprimer : c'est une photo valide
+    img.src = dataUrl;
+    img.alt = labelFor(article);
+    article.classList.add('has-photo');
+  }
+
+  function removePhoto(article){
+    clearStore(article.dataset.photoId);
+    article.classList.remove('has-photo');
+    if (article.dataset.photoType === 'partner'){
+      var mimg = article.querySelector('.mark img');
+      if (mimg) mimg.remove();          // on retrouve les initiales
+    } else {
+      var cimg = article.querySelector('img');
+      if (cimg) cimg.remove();          // on retrouve les initiales (.ph)
+    }
+  }
+
+  // Redimensionne le fichier choisi avant stockage, puis renvoie une data URL
+  function processFile(file, done){
+    if (!file || !/^image\//.test(file.type)){
+      alert('Veuillez choisir un fichier image.'); return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(){
+      var im = new Image();
+      im.onload = function(){
+        var w = im.width, h = im.height;
+        if (w > h && w > MAX_SIDE){ h = Math.round(h * MAX_SIDE / w); w = MAX_SIDE; }
+        else if (h >= w && h > MAX_SIDE){ w = Math.round(w * MAX_SIDE / h); h = MAX_SIDE; }
+        var canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(im, 0, 0, w, h);
+        var out;
+        try{ out = canvas.toDataURL('image/jpeg', JPEG_QUALITY); }
+        catch(e){ out = reader.result; }   // ex. image locale non exportable
+        done(out);
+      };
+      im.onerror = function(){ alert("Cette image n'a pas pu être chargée."); };
+      im.src = reader.result;
+    };
+    reader.onerror = function(){ alert("Le fichier n'a pas pu être lu."); };
+    reader.readAsDataURL(file);
+  }
+
+  var fileInput = document.getElementById('photoInput');
+  var pendingArticle = null;
+
+  fileInput.addEventListener('change', function(){
+    var file = fileInput.files && fileInput.files[0];
+    var article = pendingArticle;
+    pendingArticle = null;
+    fileInput.value = '';               // permet de re-choisir le même fichier
+    if (!file || !article) return;
+    processFile(file, function(dataUrl){
+      if (writeStore(article.dataset.photoId, dataUrl)) applyPhoto(article, dataUrl);
+    });
+  });
+
+  // Mise en place de chaque carte : restauration + boutons
+  document.querySelectorAll('[data-photo-id]').forEach(function(article){
+    var saved = readStore(article.dataset.photoId);
+    if (saved) applyPhoto(article, saved);
+
+    var edit = document.createElement('button');
+    edit.type = 'button';
+    edit.className = 'photo-edit-btn';
+    edit.textContent = 'Photo';
+    edit.setAttribute('aria-label', 'Ajouter ou changer la photo de ' + labelFor(article));
+    edit.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      pendingArticle = article;
+      fileInput.click();
+    });
+
+    var rm = document.createElement('button');
+    rm.type = 'button';
+    rm.className = 'photo-remove-btn';
+    rm.textContent = '×';
+    rm.title = 'Retirer la photo';
+    rm.setAttribute('aria-label', 'Retirer la photo de ' + labelFor(article));
+    rm.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      removePhoto(article);
+    });
+
+    article.appendChild(edit);
+    article.appendChild(rm);
+  });
+
+  // Activation / désactivation du mode édition (mémorisé dans ce navigateur)
+  var toggle = document.getElementById('editToggle');
+  function setMode(on){
+    document.body.classList.toggle('editing', on);
+    toggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+    toggle.querySelector('span').textContent = on ? 'Terminer' : 'Mode édition';
+    try{ localStorage.setItem(MODE_KEY, on ? '1' : '0'); }catch(e){}
+  }
+  toggle.addEventListener('click', function(){
+    setMode(!document.body.classList.contains('editing'));
+  });
+  var savedMode = null;
+  try{ savedMode = localStorage.getItem(MODE_KEY); }catch(e){}
+  if (savedMode === '1') setMode(true);
 })();
 </script>
 
