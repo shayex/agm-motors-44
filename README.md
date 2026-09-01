@@ -58,6 +58,41 @@ initiales s'affichent à la place — le site n'est jamais cassé.
 
 ---
 
+## Changer le nom d'un membre / ajouter / retirer un membre
+
+Tous les membres du bureau sont regroupés dans **une seule liste** au même
+endroit du fichier `index.html`. Cherchez le repère :
+
+```
+▼▼▼  LES MEMBRES DU BUREAU — MODIFIEZ TOUT ICI  ▼▼▼
+```
+
+Chaque membre tient sur une ligne, entre accolades `{ }` :
+
+```js
+{ id:"thomas", nom:"Thomas L.", role:"Président", bio:"…", photo:"photos/thomas.jpg" },
+```
+
+- **Changer un nom** → modifiez le texte après `nom:`. Les initiales
+  affichées à défaut de photo se recalculent toutes seules.
+- **Changer le rôle / la description** → texte après `role:` ou `bio:`.
+- **Associer une photo** → mettez le nom du fichier après `photo:` (le fichier
+  doit être déposé dans le dossier `photos/`). Laissez `photo:""` s'il n'y a
+  pas encore de photo : les initiales s'affichent.
+- **Ajouter un membre** → copiez une ligne, collez-la en dessous, changez les
+  valeurs. Donnez-lui un `id` unique (sans espace ni accent) et gardez la
+  virgule en fin de ligne.
+- **Retirer un membre** → supprimez sa ligne entière.
+
+> Le `id` est l'identifiant technique : il sert au « mode édition » de la page
+> et n'apparaît pas à l'écran. Le nom affiché, lui, est le champ `nom` — les
+> deux sont indépendants, donc renommer un membre ne casse jamais sa photo.
+
+Après modification : **Commit changes** → le site se met à jour tout seul.
+(Ou envoyez-moi le changement souhaité, je m'en occupe et je fais la PR.)
+
+---
+
 ## Le site est-il bien publié ? (GitHub Pages)
 
 Pour que le lien public affiche le site (et pas le code source), **GitHub Pages**
