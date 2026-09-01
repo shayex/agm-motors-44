@@ -252,7 +252,7 @@ section{padding:120px 0;position:relative}
   display:grid;place-items:center;font-family:"Archivo";font-weight:900;font-size:19px;color:var(--txt-dim);margin-bottom:18px;overflow:hidden}
 .partner .mark img{width:100%;height:100%;object-fit:contain;padding:8px}
 .partner h3{font-size:19px;font-stretch:108%;position:relative}
-.partner .kind{font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--accent);margin-top:7px;position:relative}
+.partner .kind{font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--accent);margin-top:7px;position:relative;text-transform:uppercase}
 .partner p{font-size:14.5px;color:var(--txt-dim);margin:12px 0 0;position:relative;line-height:1.5}
 
 .partner-cta{grid-column:1/-1;border:1px dashed var(--line-strong);border-radius:18px;padding:34px;text-align:center;background:transparent}
@@ -577,69 +577,84 @@ body.editing .card{outline:1px dashed rgba(255,74,28,.35);outline-offset:-1px}
     </div>
   </div>
 
+  <!-- ══════════════════════════════════════════════════════════════
+       ▼▼▼  LES PARTENAIRES — MODIFIEZ TOUT ICI  ▼▼▼
+       Un objet { } entre accolades = un partenaire. Sur chaque ligne :
+         · nom   : le nom affiché (met aussi à jour le bandeau défilant)
+         · type  : la catégorie (Mécanique, Préparation…)
+         · texte : la petite description
+         · logo  : le fichier image dans le dossier "partenaires"
+                   (mettez "" s'il n'y a pas encore de logo)
+         · id    : identifiant technique, SANS espace ni accent, unique
+       Les initiales affichées à défaut de logo sont calculées
+       automatiquement à partir du nom.
+       Ajouter un partenaire : copiez une ligne, collez-la en dessous,
+       changez les valeurs (gardez la virgule en fin de ligne).
+       Retirer un partenaire : supprimez sa ligne entière.
+       ══════════════════════════════════════════════════════════════ -->
+  <script>
+  window.AGM_PARTENAIRES = [
+    { id:"garage-erdre",         nom:"Garage de l'Erdre",    type:"Mécanique",    texte:"Entretien et préparation. Tarif préférentiel sur la main-d'œuvre pour les membres.", logo:"partenaires/garage-erdre.png" },
+    { id:"atlantic-performance", nom:"Atlantic Performance", type:"Préparation",  texte:"Banc de puissance et optimisation moteur. Ils accueillent une journée dyno par an.", logo:"partenaires/atlantic-performance.png" },
+    { id:"carrosserie-sevre",    nom:"Carrosserie Sèvre",    type:"Carrosserie",  texte:"Peinture et restauration. Partenaire de nos rassemblements de printemps.", logo:"partenaires/carrosserie-sevre.png" },
+    { id:"detailing-nantes",     nom:"Detailing Nantes",     type:"Esthétique",   texte:"Lavage et protection céramique. Démonstration sur place à chaque grand rassemblement.", logo:"partenaires/detailing-nantes.png" },
+    { id:"pneus-loire-ouest",    nom:"Pneus Loire Ouest",    type:"Pneumatiques", texte:"Montage et géométrie. Contrôle gratuit avant chaque départ en convoi.", logo:"partenaires/pneus-loire-ouest.png" },
+    { id:"cafe-circuit",         nom:"Café du Circuit",      type:"Restauration", texte:"Notre point de rendez-vous du samedi matin. Café offert aux membres avant le départ.", logo:"partenaires/cafe-circuit.png" }
+  ];
+  </script>
+
   <div class="marquee">
-    <div class="marquee-track">
-      <span>GARAGE DE L'ERDRE</span><span>ATLANTIC PERFORMANCE</span><span>CARROSSERIE SÈVRE</span><span>DETAILING NANTES</span><span>PNEUS LOIRE OUEST</span><span>CAFÉ DU CIRCUIT</span>
-      <span>GARAGE DE L'ERDRE</span><span>ATLANTIC PERFORMANCE</span><span>CARROSSERIE SÈVRE</span><span>DETAILING NANTES</span><span>PNEUS LOIRE OUEST</span><span>CAFÉ DU CIRCUIT</span>
-    </div>
+    <div class="marquee-track" id="partnerMarquee"></div>
   </div>
 
   <div class="wrap">
-    <div class="partners">
-
-      <!-- Un bloc = un partenaire. Le logo se charge automatiquement depuis
-           partenaires/<identifiant>.png (voir data-photo-id). Déposez le fichier
-           dans le dossier "partenaires" : s'il est absent, les initiales restent. -->
-      <article class="partner reveal" data-photo-id="garage-erdre" data-photo-type="partner">
-        <div class="mark">GE<img src="partenaires/garage-erdre.png" alt="Garage de l'Erdre" onerror="this.remove()"></div>
-        <h3>Garage de l'Erdre</h3>
-        <div class="kind">MÉCANIQUE</div>
-        <p>Entretien et préparation. Tarif préférentiel sur la main-d'œuvre pour les membres.</p>
-      </article>
-
-      <article class="partner reveal" style="--d:70ms" data-photo-id="atlantic-performance" data-photo-type="partner">
-        <div class="mark">AP<img src="partenaires/atlantic-performance.png" alt="Atlantic Performance" onerror="this.remove()"></div>
-        <h3>Atlantic Performance</h3>
-        <div class="kind">PRÉPARATION</div>
-        <p>Banc de puissance et optimisation moteur. Ils accueillent une journée dyno par an.</p>
-      </article>
-
-      <article class="partner reveal" style="--d:140ms" data-photo-id="carrosserie-sevre" data-photo-type="partner">
-        <div class="mark">CS<img src="partenaires/carrosserie-sevre.png" alt="Carrosserie Sèvre" onerror="this.remove()"></div>
-        <h3>Carrosserie Sèvre</h3>
-        <div class="kind">CARROSSERIE</div>
-        <p>Peinture et restauration. Partenaire de nos rassemblements de printemps.</p>
-      </article>
-
-      <article class="partner reveal" style="--d:210ms" data-photo-id="detailing-nantes" data-photo-type="partner">
-        <div class="mark">DN<img src="partenaires/detailing-nantes.png" alt="Detailing Nantes" onerror="this.remove()"></div>
-        <h3>Detailing Nantes</h3>
-        <div class="kind">ESTHÉTIQUE</div>
-        <p>Lavage et protection céramique. Démonstration sur place à chaque grand rassemblement.</p>
-      </article>
-
-      <article class="partner reveal" style="--d:280ms" data-photo-id="pneus-loire-ouest" data-photo-type="partner">
-        <div class="mark">PL<img src="partenaires/pneus-loire-ouest.png" alt="Pneus Loire Ouest" onerror="this.remove()"></div>
-        <h3>Pneus Loire Ouest</h3>
-        <div class="kind">PNEUMATIQUES</div>
-        <p>Montage et géométrie. Contrôle gratuit avant chaque départ en convoi.</p>
-      </article>
-
-      <article class="partner reveal" style="--d:350ms" data-photo-id="cafe-circuit" data-photo-type="partner">
-        <div class="mark">CC<img src="partenaires/cafe-circuit.png" alt="Café du Circuit" onerror="this.remove()"></div>
-        <h3>Café du Circuit</h3>
-        <div class="kind">RESTAURATION</div>
-        <p>Notre point de rendez-vous du samedi matin. Café offert aux membres avant le départ.</p>
-      </article>
-
-      <div class="partner-cta reveal">
+    <div class="partners" id="partners">
+      <!-- Les cartes partenaires sont générées à partir de la liste ci-dessus,
+           puis insérées ici, avant ce bloc « Devenir partenaire ». -->
+      <div class="partner-cta reveal" id="partnerCta">
         <h3>Devenir partenaire</h3>
         <p>Vous êtes un professionnel de l'automobile en Loire-Atlantique et vous voulez être visible auprès de nos membres et des visiteurs de nos rassemblements ? On vous explique comment ça marche.</p>
         <a href="#contact" class="btn btn-p">Nous contacter</a>
       </div>
-
     </div>
   </div>
+
+  <script>
+  (function(){
+    var list = window.AGM_PARTENAIRES || [];
+    function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+    var STOP = {de:1,du:1,des:1,d:1,la:1,le:1,l:1,les:1,et:1,"à":1,au:1,aux:1,un:1,une:1};
+    function initials(nom){
+      var w = String(nom||'').split(/[\s'’]+/).filter(function(x){ return x && !STOP[x.toLowerCase()]; });
+      var a = w[0] ? w[0][0] : '';
+      var b = w[1] ? w[1][0] : (w[0] && w[0][1] ? w[0][1] : '');
+      return (a + b).toUpperCase();
+    }
+    // Bandeau défilant : les noms, répétés deux fois pour un défilement continu
+    var mq = document.getElementById('partnerMarquee');
+    if (mq){
+      var names = list.map(function(p){ return '<span>'+esc(String(p.nom).toUpperCase())+'</span>'; }).join('');
+      mq.innerHTML = names + names;
+    }
+    // Cartes partenaires, insérées avant le bloc « Devenir partenaire »
+    var cta = document.getElementById('partnerCta');
+    if (cta){
+      var cards = list.map(function(p, i){
+        var delay = i * 70;
+        var style = delay ? ' style="--d:'+delay+'ms"' : '';
+        var logo = p.logo ? '<img src="'+esc(p.logo)+'" alt="'+esc(p.nom)+'" onerror="this.remove()">' : '';
+        return '<article class="partner reveal"'+style+' data-photo-id="'+esc(p.id)+'" data-photo-type="partner">'
+             +   '<div class="mark">'+esc(initials(p.nom))+logo+'</div>'
+             +   '<h3>'+esc(p.nom)+'</h3>'
+             +   '<div class="kind">'+esc(p.type)+'</div>'
+             +   '<p>'+esc(p.texte)+'</p>'
+             + '</article>';
+      }).join('');
+      cta.insertAdjacentHTML('beforebegin', cards);
+    }
+  })();
+  </script>
 </section>
 
 <!-- ============ CONTACT ============ -->
