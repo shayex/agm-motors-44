@@ -165,7 +165,7 @@ section{padding:120px 0;position:relative}
 .card:hover img{filter:grayscale(0);transform:scale(1.06)}
 .card .scrim{position:absolute;inset:0;background:linear-gradient(transparent 38%,rgba(6,7,10,.82) 76%,rgba(6,7,10,.96))}
 .card .info{position:absolute;left:0;right:0;bottom:0;padding:20px}
-.card .role{font-size:11.5px;font-weight:600;letter-spacing:.14em;color:var(--accent);margin-bottom:6px}
+.card .role{font-size:11.5px;font-weight:600;letter-spacing:.14em;color:var(--accent);margin-bottom:6px;text-transform:uppercase}
 .card h3{font-size:21px;font-stretch:110%}
 .card .bio{font-size:14px;color:var(--txt-dim);line-height:1.45;max-height:0;opacity:0;overflow:hidden;
   transition:max-height .45s cubic-bezier(.2,.7,.3,1),opacity .35s,margin .45s}
@@ -394,77 +394,64 @@ body.editing .card{outline:1px dashed rgba(255,74,28,.35);outline-offset:-1px}
       <p>Les personnes à qui parler sur place, au départ d'un convoi ou à l'entrée d'un rassemblement.</p>
     </div>
 
-    <div class="crew">
+    <!-- ══════════════════════════════════════════════════════════════
+         ▼▼▼  LES MEMBRES DU BUREAU — MODIFIEZ TOUT ICI  ▼▼▼
+         Un objet { } entre accolades = un membre. Sur chaque ligne :
+           · nom   : le nom affiché (changez-le librement)
+           · role  : la fonction (Président, Trésorier…)
+           · bio   : la petite description
+           · photo : le fichier image dans le dossier "photos"
+                     (mettez "" si pas encore de photo)
+           · id    : identifiant technique, SANS espace ni accent, unique
+                     (sert au mode édition — ne le réutilisez pas deux fois)
+         Les initiales affichées à défaut de photo sont calculées
+         automatiquement à partir du nom.
+         Ajouter un membre : copiez une ligne, collez-la en dessous,
+         changez les valeurs (n'oubliez pas la virgule en fin de ligne).
+         Retirer un membre : supprimez sa ligne entière.
+         ══════════════════════════════════════════════════════════════ -->
+    <script>
+    window.AGM_BUREAU = [
+      { id:"thomas", nom:"Thomas L.", role:"Président",           bio:"Fondateur. Il négocie les lieux, parle aux mairies et ouvre le portail le matin.", photo:"photos/thomas.jpg" },
+      { id:"marion", nom:"Marion B.", role:"Vice-présidente",     bio:"Elle trace les itinéraires de convoi, repère les pauses et gère les inscriptions.", photo:"photos/marion.jpg" },
+      { id:"kevin",  nom:"Kévin D.",  role:"Trésorier",           bio:"Cotisations, assurance, budget des événements. Il remet les cartes de membre.", photo:"photos/kevin.jpg" },
+      { id:"sarah",  nom:"Sarah A.",  role:"Secrétaire",          bio:"Comptes rendus, déclarations en préfecture et réponses aux messages reçus.", photo:"photos/sarah.jpg" },
+      { id:"julien", nom:"Julien M.", role:"Responsable convois", bio:"Voiture ouvreuse. Il fait le briefing sécurité et donne le rythme du groupe.", photo:"photos/julien.jpg" },
+      { id:"noe",    nom:"Noé R.",    role:"Photo et réseaux",    bio:"Il couvre chaque sortie et publie les albums dans la semaine qui suit.", photo:"photos/noe.jpg" }
+    ];
+    </script>
 
-      <!-- Une carte = un membre. Remplacez src, le nom, la fonction et la description.
-           Si la photo n'existe pas, les initiales du bloc .ph s'affichent. -->
-      <article class="card reveal" data-photo-id="thomas" data-photo-type="crew">
-        <div class="ph">TL</div>
-        <img src="photos/thomas.jpg" alt="Thomas L." onerror="this.remove()">
-        <div class="scrim"></div>
-        <div class="info">
-          <div class="role">PRÉSIDENT</div>
-          <h3>Thomas L.</h3>
-          <p class="bio">Fondateur. Il négocie les lieux, parle aux mairies et ouvre le portail le matin.</p>
-        </div>
-      </article>
-
-      <article class="card reveal" style="--d:80ms" data-photo-id="marion" data-photo-type="crew">
-        <div class="ph">MB</div>
-        <img src="photos/marion.jpg" alt="Marion B." onerror="this.remove()">
-        <div class="scrim"></div>
-        <div class="info">
-          <div class="role">VICE-PRÉSIDENTE</div>
-          <h3>Marion B.</h3>
-          <p class="bio">Elle trace les itinéraires de convoi, repère les pauses et gère les inscriptions.</p>
-        </div>
-      </article>
-
-      <article class="card reveal" style="--d:160ms" data-photo-id="kevin" data-photo-type="crew">
-        <div class="ph">KD</div>
-        <img src="photos/kevin.jpg" alt="Kévin D." onerror="this.remove()">
-        <div class="scrim"></div>
-        <div class="info">
-          <div class="role">TRÉSORIER</div>
-          <h3>Kévin D.</h3>
-          <p class="bio">Cotisations, assurance, budget des événements. Il remet les cartes de membre.</p>
-        </div>
-      </article>
-
-      <article class="card reveal" style="--d:240ms" data-photo-id="sarah" data-photo-type="crew">
-        <div class="ph">SA</div>
-        <img src="photos/sarah.jpg" alt="Sarah A." onerror="this.remove()">
-        <div class="scrim"></div>
-        <div class="info">
-          <div class="role">SECRÉTAIRE</div>
-          <h3>Sarah A.</h3>
-          <p class="bio">Comptes rendus, déclarations en préfecture et réponses aux messages reçus.</p>
-        </div>
-      </article>
-
-      <article class="card reveal" style="--d:320ms" data-photo-id="julien" data-photo-type="crew">
-        <div class="ph">JM</div>
-        <img src="photos/julien.jpg" alt="Julien M." onerror="this.remove()">
-        <div class="scrim"></div>
-        <div class="info">
-          <div class="role">RESPONSABLE CONVOIS</div>
-          <h3>Julien M.</h3>
-          <p class="bio">Voiture ouvreuse. Il fait le briefing sécurité et donne le rythme du groupe.</p>
-        </div>
-      </article>
-
-      <article class="card reveal" style="--d:400ms" data-photo-id="noe" data-photo-type="crew">
-        <div class="ph">NR</div>
-        <img src="photos/noe.jpg" alt="Noé R." onerror="this.remove()">
-        <div class="scrim"></div>
-        <div class="info">
-          <div class="role">PHOTO ET RÉSEAUX</div>
-          <h3>Noé R.</h3>
-          <p class="bio">Il couvre chaque sortie et publie les albums dans la semaine qui suit.</p>
-        </div>
-      </article>
-
-    </div>
+    <div class="crew" id="crew"></div>
+    <script>
+    (function(){
+      var crew = document.getElementById('crew');
+      if (!crew) return;
+      var list = window.AGM_BUREAU || [];
+      function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+      function initials(nom){
+        var p = String(nom||'').trim().split(/\s+/).filter(Boolean);
+        var a = p[0] ? p[0][0] : '';
+        var b = p[1] ? p[1][0] : (p[0] && p[0][1] ? p[0][1] : '');
+        return (a + b).toUpperCase();
+      }
+      crew.innerHTML = list.map(function(m, i){
+        var delay = i * 80;
+        var style = delay ? ' style="--d:'+delay+'ms"' : '';
+        var img = m.photo ? '<img src="'+esc(m.photo)+'" alt="'+esc(m.nom)+'" onerror="this.remove()">' : '';
+        return '<article class="card reveal"'+style+' data-photo-id="'+esc(m.id)+'" data-photo-type="crew">'
+             +   '<div class="ph">'+esc(initials(m.nom))+'</div>'
+             +   img
+             +   '<div class="scrim"></div>'
+             +   '<div class="info">'
+             +     '<div class="role">'+esc(m.role)+'</div>'
+             +     '<h3>'+esc(m.nom)+'</h3>'
+             +     '<p class="bio">'+esc(m.bio)+'</p>'
+             +   '</div>'
+             + '</article>';
+      }).join('');
+    })();
+    </script>
   </div>
 </section>
 
