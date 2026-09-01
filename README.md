@@ -1,0 +1,83 @@
+# AGM Motors 44 — site de l'association
+
+Site vitrine en un seul fichier (`index.html`). Aucune installation, aucun
+serveur : tout tient dans cette page.
+
+---
+
+## Ajouter les photos (visibles par TOUS les visiteurs)
+
+Les photos et logos se chargent automatiquement depuis deux dossiers du dépôt :
+
+- `photos/` → les photos du bureau
+- `partenaires/` → les logos des partenaires
+
+**Il suffit de déposer un fichier au bon nom.** Si le fichier est absent, les
+initiales s'affichent à la place — le site n'est jamais cassé.
+
+### Comment déposer une image directement sur GitHub (sans logiciel)
+
+1. Sur la page du dépôt GitHub, ouvrez le dossier `photos` (ou `partenaires`).
+   - Si le dossier n'existe pas encore : bouton **Add file → Create new file**,
+     tapez `photos/thomas.jpg` dans le nom — GitHub crée le dossier tout seul —
+     ou plus simple, **Add file → Upload files** puis glissez vos images.
+2. Bouton **Add file → Upload files**.
+3. Glissez-déposez votre image, en la renommant **exactement** comme dans les
+   tableaux ci-dessous (le nom compte, majuscules/minuscules comprises).
+4. Bouton vert **Commit changes**.
+5. Attendez ~1 minute : la photo apparaît sur le site en ligne.
+
+> Astuce : des images **carrées** (ex. 800×800 px) rendent le mieux pour le
+> bureau. Pour les logos partenaires, un **PNG à fond transparent** est idéal.
+
+### Noms de fichiers attendus — Le bureau (`photos/`)
+
+| Personne     | Fichier à déposer      |
+|--------------|------------------------|
+| Thomas L.    | `photos/thomas.jpg`    |
+| Marion B.    | `photos/marion.jpg`    |
+| Kévin D.     | `photos/kevin.jpg`     |
+| Sarah A.     | `photos/sarah.jpg`     |
+| Julien M.    | `photos/julien.jpg`    |
+| Noé R.       | `photos/noe.jpg`       |
+
+### Noms de fichiers attendus — Partenaires (`partenaires/`)
+
+| Partenaire            | Fichier à déposer                    |
+|-----------------------|--------------------------------------|
+| Garage de l'Erdre     | `partenaires/garage-erdre.png`       |
+| Atlantic Performance  | `partenaires/atlantic-performance.png` |
+| Carrosserie Sèvre     | `partenaires/carrosserie-sevre.png`  |
+| Detailing Nantes      | `partenaires/detailing-nantes.png`   |
+| Pneus Loire Ouest     | `partenaires/pneus-loire-ouest.png`  |
+| Café du Circuit       | `partenaires/cafe-circuit.png`       |
+
+> Vous ajoutez un nouveau membre ou partenaire ? Le nom de fichier attendu est
+> la valeur `data-photo-id` de la carte dans `index.html`. Dites-le-moi et je
+> mets la liste à jour.
+
+---
+
+## Le site est-il bien publié ? (GitHub Pages)
+
+Pour que le lien public affiche le site (et pas le code source), **GitHub Pages**
+doit être activé :
+
+1. Dépôt GitHub → onglet **Settings** → menu **Pages**.
+2. Section *Build and deployment* → **Source : Deploy from a branch**.
+3. **Branch : `main`**, dossier **`/ (root)`** → **Save**.
+4. Après une minute, l'adresse publique s'affiche en haut de cette même page
+   (de la forme `https://shayex.github.io/agm-motors-44/`).
+
+Une fois Pages activé, chaque photo déposée dans `photos/` ou `partenaires/`
+devient visible par tous les visiteurs, automatiquement.
+
+---
+
+## Mode édition sur la page (aperçu personnel)
+
+La page contient aussi un bouton **« Mode édition »** (en bas à droite) qui
+permet d'essayer une photo en un clic. ⚠️ Ces photos-là sont enregistrées
+**uniquement dans votre navigateur** : elles servent d'aperçu et **ne sont pas
+visibles par les autres visiteurs**. Pour publier pour tout le monde, utilisez
+la méthode des dossiers ci-dessus.
