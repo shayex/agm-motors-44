@@ -118,6 +118,37 @@ Chaque partenaire tient sur une ligne :
 
 ---
 
+## Carte AGM (abonnement annuel) et ses offres
+
+L'onglet **Carte AGM** présente l'abonnement à l'année et la liste des remises
+partenaires. Tout se modifie au même endroit dans `index.html`, repère :
+
+```
+▼▼▼  LES OFFRES DE LA CARTE — MODIFIEZ TOUT ICI  ▼▼▼
+```
+
+- **Changer le prix** → la ligne juste au-dessus de la liste :
+  `window.AGM_CARTE_PRIX = "20€";`
+- **Un partenaire = un bloc** `{ … }` :
+
+  ```js
+  { nom:"Lustr'O Detailing", logo:"", lignes:[
+    "-15% nettoyage auto intérieur et extérieur, pose de céramique",
+    "À domicile"
+  ]},
+  ```
+
+  - `nom` : le nom affiché.
+  - `lignes` : un avantage par ligne (entre guillemets, séparés par des
+    virgules). Un début de ligne en `-15%`, `-12€`… est mis en avant en couleur
+    automatiquement.
+  - `logo` : facultatif. Mettez `""` pour afficher les initiales, ou un chemin
+    d'image (par ex. `offres/lustro.png`) après avoir déposé le fichier.
+- **Ajouter / retirer** une offre → ajoutez / supprimez un bloc `{ … }` (gardez
+  les virgules entre les blocs).
+
+---
+
 ## Le site est-il bien publié ? (GitHub Pages)
 
 Pour que le lien public affiche le site (et pas le code source), **GitHub Pages**
