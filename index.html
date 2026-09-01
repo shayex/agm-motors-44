@@ -306,6 +306,50 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
 .pl-label{font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--txt-dim);
   animation:pulse 1.6s ease-in-out infinite}
 
+/* ══════ Animations supplémentaires ══════ */
+/* Cartes en relief 3D + reflet qui suit le curseur (piloté par JS) */
+.card,.partner{transform-style:preserve-3d;will-change:transform}
+.card .info{transform:translateZ(18px)}
+.tilt-glow{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(180px circle at var(--mx,50%) var(--my,50%),rgba(255,74,28,.18),transparent 60%)}
+.card:hover .tilt-glow,.partner:hover .tilt-glow{opacity:1}
+
+/* Pastille du logo qui bat dans le menu */
+.logo i{animation:pulse 2.6s ease-in-out infinite}
+
+/* Ligne d'accent qui se déploie sous les intitulés de section */
+.sec-label{position:relative;padding-bottom:14px}
+.sec-label::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:0;border-radius:2px;
+  background:linear-gradient(90deg,var(--accent),transparent);transition:width .9s cubic-bezier(.2,.7,.3,1) .2s}
+.reveal.in .sec-label::after,.sec-head.in .sec-label::after{width:54px}
+
+/* Compteurs : léger relief au survol + halo */
+.counters div{transition:background .35s,transform .35s}
+.counters div:hover{background:var(--surface);transform:translateY(-3px)}
+
+/* Indice « défilez » animé en bas du hero */
+.scroll-hint{display:flex;flex-direction:column;align-items:center;gap:8px;margin:40px 0 0;
+  font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--txt-dim);
+  animation:floatUp 1s .5s cubic-bezier(.2,.7,.3,1) both}
+.scroll-hint .mouse{width:26px;height:42px;border:2px solid var(--line-strong);border-radius:16px;position:relative}
+.scroll-hint .mouse::before{content:"";position:absolute;left:50%;top:8px;width:4px;height:8px;border-radius:2px;
+  background:var(--accent);transform:translateX(-50%);animation:wheel 1.7s ease-in-out infinite}
+@keyframes wheel{0%{opacity:0;transform:translate(-50%,0)}30%{opacity:1}70%{opacity:1}100%{opacity:0;transform:translate(-50%,12px)}}
+
+/* Événements : barre d'accent qui grandit au survol */
+.ev{position:relative;overflow:hidden}
+.ev::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(var(--accent),var(--accent-2));
+  transform:scaleY(0);transform-origin:top;transition:transform .4s ease}
+.ev:hover::before{transform:scaleY(1)}
+
+/* Convois : la puce d'arrivée qui palpite en continu */
+@keyframes ring{0%,100%{box-shadow:0 0 0 5px rgba(255,74,28,.16)}50%{box-shadow:0 0 0 9px rgba(255,74,28,.05)}}
+.convoy:not(.done) .route li.end::before{animation:ring 2.2s ease-in-out infinite}
+
+/* Le mot souligné « rassemblements/convois » du texte : accent au survol */
+#asso strong{color:var(--txt);transition:color .3s}
+#asso strong:hover{color:var(--accent)}
+
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition-duration:.01ms!important}
   html{scroll-behavior:auto}
@@ -385,6 +429,10 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       <div class="meta" id="nextMeta"></div>
       <a href="#convois" class="btn btn-s go">Détails du convoi</a>
     </div>
+
+    <a href="#asso" class="scroll-hint" aria-label="Défiler vers le bas">
+      <span class="mouse"></span><span>Défiler</span>
+    </a>
   </div>
 
   <div class="ticker">
@@ -876,6 +924,44 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
     });
   }, {threshold:.5});
   document.querySelectorAll('[data-count]').forEach(function(el){ co.observe(el); });
+
+  /* Relief 3D + reflet qui suit le curseur sur les cartes (souris uniquement) */
+  var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if (fine){
+    var MAX = 7; // degrés d'inclinaison max
+    document.querySelectorAll('.card,.partner').forEach(function(el){
+      var glow = document.createElement('span');
+      glow.className = 'tilt-glow';
+      el.appendChild(glow);
+      var raf = null, lift = el.classList.contains('partner') ? 5 : 7;
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width;
+        var py = (e.clientY - r.top) / r.height;
+        glow.style.setProperty('--mx', (px*100)+'%');
+        glow.style.setProperty('--my', (py*100)+'%');
+        if (raf) return;
+        raf = requestAnimationFrame(function(){
+          raf = null;
+          el.style.transform = 'perspective(760px) rotateX('+((0.5-py)*MAX).toFixed(2)+'deg) rotateY('+((px-0.5)*MAX).toFixed(2)+'deg) translateY(-'+lift+'px)';
+        });
+      });
+      el.addEventListener('mouseleave', function(){
+        if (raf){ cancelAnimationFrame(raf); raf = null; }
+        el.style.transform = '';
+      });
+    });
+
+    /* Léger parallaxe du contenu du hero au mouvement de la souris */
+    var heroWrap = document.querySelector('.hero .wrap');
+    if (heroWrap){
+      window.addEventListener('mousemove', function(e){
+        var dx = (e.clientX / window.innerWidth - 0.5) * 10;
+        var dy = (e.clientY / window.innerHeight - 0.5) * 8;
+        heroWrap.style.transform = 'translate('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px)';
+      }, {passive:true});
+    }
+  }
 })();
 </script>
 
