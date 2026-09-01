@@ -188,7 +188,7 @@ section{padding:120px 0;position:relative}
 .cv-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:10px 24px;margin-bottom:26px}
 .cv-top h3{font-size:25px;font-stretch:112%}
 .cv-when{font-family:"Archivo";font-weight:700;font-size:14px;letter-spacing:.06em;color:var(--accent);
-  border:1px solid rgba(255,74,28,.4);border-radius:99px;padding:6px 15px}
+  border:1px solid rgba(255,74,28,.4);border-radius:99px;padding:6px 15px;text-transform:uppercase}
 .convoy.done .cv-when{color:var(--txt-dim);border-color:var(--line)}
 
 .route{list-style:none;margin:0 0 24px;padding:0 0 0 30px;position:relative}
@@ -377,12 +377,12 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       <a href="#convois" class="btn btn-s">Nos convois</a>
     </div>
 
-    <div class="next">
+    <div class="next" id="nextCard" hidden>
       <div>
         <div class="tag"><b></b>PROCHAIN DÉPART</div>
-        <h3>Le Mans Classic</h3>
+        <h3 id="nextTitle"></h3>
       </div>
-      <div class="meta">Samedi 12 septembre · rendez-vous 07h00<br>Parking Atlantis, Saint-Herblain</div>
+      <div class="meta" id="nextMeta"></div>
       <a href="#convois" class="btn btn-s go">Détails du convoi</a>
     </div>
   </div>
@@ -571,30 +571,91 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       <p>Le point de rendez-vous est annoncé une semaine avant. Plein fait avant l'heure de départ, allure raisonnable, limitations respectées.</p>
     </div>
 
-    <article class="convoy reveal">
-      <div class="cv-top"><h3>Direction Le Mans Classic</h3><span class="cv-when">SAM. 12 SEPTEMBRE</span></div>
-      <ul class="route">
-        <li><span class="h">07h00</span>Parking Atlantis, Saint-Herblain<span class="sub">Briefing et vérification des pleins</span></li>
-        <li><span class="h">07h30</span>Départ du convoi<span class="sub">Par la N23, allure tranquille</span></li>
-        <li><span class="h">09h00</span>Pause café, aire de La Flèche</li>
-        <li class="end"><span class="h">10h30</span>Arrivée au circuit Bugatti, Le Mans</li>
-      </ul>
-      <div class="cv-stats">
-        <div><b>185 km</b>distance</div><div><b>3 h 30</b>avec pause</div><div><b>32</b>places réservées</div>
-      </div>
-    </article>
+    <!-- ══════════════════════════════════════════════════════════════
+         ▼▼▼  LES CONVOIS À VENIR — MODIFIEZ TOUT ICI  ▼▼▼
+         Un objet { } entre accolades = un convoi à venir. Sur chaque ligne :
+           · titre  : le nom du convoi
+           · quand  : la date (ex. "Sam. 12 septembre")
+           · etapes : la liste des étapes, chacune { h, lieu, sous, fin }
+                      - h    : l'heure (ex. "07h00")
+                      - lieu : le lieu / l'action
+                      - sous : (facultatif) précision affichée en petit
+                      - fin  : mettez  fin:true  sur la dernière étape (arrivée)
+           · stats  : les encadrés du bas, chacun { valeur, label }
+         Tant que la liste est vide ( [] ), un encadré « aucun convoi » s'affiche
+         et la carte « Prochain départ » en haut du site est masquée.
+         Quand un convoi est passé, déplacez-le dans « Convois déjà réalisés »
+         plus bas (bloc en HTML classique).
+         ══════════════════════════════════════════════════════════════ -->
+    <script>
+    window.AGM_CONVOIS = [
+      // Exemple (à copier quand vous aurez un convoi) :
+      // {
+      //   titre:"Direction Le Mans Classic",
+      //   quand:"Sam. 12 septembre",
+      //   etapes:[
+      //     { h:"07h00", lieu:"Parking Atlantis, Saint-Herblain", sous:"Briefing et vérification des pleins" },
+      //     { h:"07h30", lieu:"Départ du convoi", sous:"Par la N23, allure tranquille" },
+      //     { h:"09h00", lieu:"Pause café, aire de La Flèche" },
+      //     { h:"10h30", lieu:"Arrivée au circuit Bugatti, Le Mans", fin:true }
+      //   ],
+      //   stats:[ { valeur:"185 km", label:"distance" }, { valeur:"3 h 30", label:"avec pause" }, { valeur:"32", label:"places réservées" } ]
+      // },
+    ];
+    </script>
 
-    <article class="convoy reveal" style="--d:90ms">
-      <div class="cv-top"><h3>Épopée vendéenne, Les Sables-d'Olonne</h3><span class="cv-when">DIM. 4 OCTOBRE</span></div>
-      <ul class="route">
-        <li><span class="h">08h15</span>Péage de Nantes-Sud, A83</li>
-        <li><span class="h">08h45</span>Départ du convoi</li>
-        <li class="end"><span class="h">10h00</span>Arrivée sur le remblai des Sables-d'Olonne</li>
-      </ul>
-      <div class="cv-stats">
-        <div><b>105 km</b>distance</div><div><b>1 h 45</b>trajet</div><div><b>Ouvert</b>inscriptions</div>
-      </div>
-    </article>
+    <div id="convois-list"></div>
+    <script>
+    (function(){
+      var box = document.getElementById('convois-list');
+      if (!box) return;
+      var list = window.AGM_CONVOIS || [];
+      function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+      if (!list.length){
+        box.innerHTML = '<div class="ev-empty reveal">'
+          + '<h3>Aucun convoi programmé pour l\'instant</h3>'
+          + '<p>Le prochain départ sera annoncé ici. En attendant, découvrez nos convois déjà réalisés plus bas.</p>'
+          + '</div>';
+      } else {
+        box.innerHTML = list.map(function(c, i){
+          var delay = i * 90;
+          var style = delay ? ' style="--d:'+delay+'ms"' : '';
+          var etapes = (c.etapes||[]).map(function(e){
+            var sous = e.sous ? '<span class="sub">'+esc(e.sous)+'</span>' : '';
+            return '<li'+(e.fin?' class="end"':'')+'><span class="h">'+esc(e.h)+'</span>'+esc(e.lieu)+sous+'</li>';
+          }).join('');
+          var stats = (c.stats||[]).map(function(s){
+            return '<div><b>'+esc(s.valeur)+'</b>'+esc(s.label)+'</div>';
+          }).join('');
+          return '<article class="convoy reveal"'+style+'>'
+               +   '<div class="cv-top"><h3>'+esc(c.titre)+'</h3><span class="cv-when">'+esc(c.quand)+'</span></div>'
+               +   '<ul class="route">'+etapes+'</ul>'
+               +   '<div class="cv-stats">'+stats+'</div>'
+               + '</article>';
+        }).join('');
+      }
+
+      // Carte « Prochain départ » du hero : reprend le premier convoi à venir
+      var card = document.getElementById('nextCard');
+      if (card){
+        if (list.length){
+          var c0 = list[0], e0 = (c0.etapes||[])[0] || {};
+          var t = document.getElementById('nextTitle');
+          var m = document.getElementById('nextMeta');
+          if (t) t.textContent = c0.titre || '';
+          if (m){
+            var line1 = (c0.quand||'') + (e0.h ? ' · rendez-vous ' + e0.h : '');
+            m.innerHTML = esc(line1) + (e0.lieu ? '<br>'+esc(e0.lieu) : '');
+          }
+          card.hidden = false;
+        } else {
+          card.hidden = true;
+        }
+      }
+    })();
+    </script>
 
     <h3 class="reveal" style="font-size:26px;font-stretch:112%;margin:64px 0 24px">Convois déjà réalisés</h3>
 
