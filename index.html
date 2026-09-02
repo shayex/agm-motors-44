@@ -126,6 +126,10 @@ section{padding:120px 0;position:relative}
 .counters b{display:block;font-family:"Archivo";font-weight:900;font-stretch:118%;font-size:clamp(34px,4.4vw,48px);
   background:linear-gradient(140deg,#fff,#9AA6B6);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
 .counters span{font-size:13.5px;color:var(--txt-dim);margin-top:8px;display:block}
+.about-side{display:flex;flex-direction:column;gap:30px}
+.asso-logo{width:min(280px,72%);align-self:center;margin-top:4px;
+  filter:drop-shadow(0 12px 26px rgba(255,74,28,.22));animation:floaty 7s ease-in-out infinite}
+@media(max-width:900px){.asso-logo{width:min(220px,60%)}}
 
 /* ══════ STAFF : cartes photo ══════ */
 .crew{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:22px}
@@ -177,7 +181,9 @@ section{padding:120px 0;position:relative}
 .archive tbody tr:hover{background:rgba(255,255,255,.03)}
 .archive td:first-child{font-family:"Archivo";font-weight:600;font-size:14px;color:var(--txt-dim);white-space:nowrap;padding-right:26px}
 .archive td:last-child{text-align:right;font-family:"Archivo";font-weight:700;font-size:15px;color:var(--accent)}
-@media(max-width:640px){.archive th:nth-child(3),.archive td:nth-child(3){display:none}}
+.archive .sep{color:var(--accent);font-weight:700;margin:0 8px}
+.archive .lieu{color:var(--txt-dim)}
+@media(max-width:640px){.archive .lieu{display:block;margin-top:2px}.archive .sep{display:none}}
 
 /* ══════ Convois ══════ */
 .convoy{background:var(--bg-2);border:1px solid var(--line);border-radius:22px;padding:30px 32px;margin-bottom:16px;
@@ -540,11 +546,14 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
         <p>Les <strong>rassemblements</strong> : on réserve un lieu autour de Nantes, on ouvre les portes, chacun vient exposer sa voiture membre ou non.</p>
         <p>Les <strong>convois</strong> : on part groupés vers les grands événements de la région. Briefing avant le départ, itinéraire préparé, pauses prévues, une voiture ouvreuse et une voiture qui ferme la marche. Personne ne reste sur le bord de la route.</p>
       </div>
-      <div class="counters reveal" style="--d:120ms">
-        <div><b data-count="2021" data-plain="1">2024</b><span>Année de création</span></div>
-        <div><b data-count="0" data-auto="membres">0</b><span>Membres</span></div>
-        <div><b data-count="0" data-auto="rassemblements">0</b><span>Rassemblements organisés</span></div>
-        <div><b data-count="0" data-auto="convois">0</b><span>Convois menés</span></div>
+      <div class="about-side reveal" style="--d:120ms">
+        <div class="counters">
+          <div><b data-count="2021" data-plain="1">2024</b><span>Année de création</span></div>
+          <div><b data-count="0" data-auto="membres">0</b><span>Membres</span></div>
+          <div><b data-count="0" data-auto="rassemblements">0</b><span>Rassemblements organisés</span></div>
+          <div><b data-count="0" data-auto="convois">0</b><span>Convois menés</span></div>
+        </div>
+        <img class="asso-logo" src="logo.png" alt="Logo AGM Motors 44" onerror="this.remove()">
       </div>
     </div>
   </div>
@@ -685,13 +694,12 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
     <div class="reveal" style="margin-top:64px">
       <h3 style="font-size:26px;font-stretch:112%">Ceux qu'on a déjà organisés</h3>
       <table class="archive">
-        <thead><tr><th>DATE</th><th>RASSEMBLEMENT</th><th>LIEU</th><th>VÉHICULES</th></tr></thead>
+        <thead><tr><th>DATE</th><th>RASSEMBLEMENT</th><th>VÉHICULES</th></tr></thead>
         <tbody>
-          <tr><td>Juillet 2026</td><td>AGM Motors</td><td>Domaine des Lys, Ancenis</td><td>170</td></tr>
-          <tr><td>Mars 2026</td><td>Historic Auto</td><td>Parc des Expositions, Nantes</td><td></td></tr>
-          <tr><td>Septembre 2025</td><td>AGM Motors</td><td>Obox Auto, Saint-Géréon</td><td>115</td></tr>
-          <tr><td>Juillet 2025</td><td>AGM Motors</td><td>Obox Auto, Saint-Géréon</td><td>100</td></tr>
-          
+          <tr><td>Juillet 2026</td><td>AGM Motors <span class="sep">•</span> <span class="lieu">Domaine des Lys, Ancenis</span></td><td>170</td></tr>
+          <tr><td>Mars 2026</td><td>Historic Auto <span class="sep">•</span> <span class="lieu">Parc des Expositions, Nantes</span></td><td></td></tr>
+          <tr><td>Septembre 2025</td><td>AGM Motors <span class="sep">•</span> <span class="lieu">Obox Auto, Saint-Géréon</span></td><td>115</td></tr>
+          <tr><td>Juillet 2025</td><td>AGM Motors <span class="sep">•</span> <span class="lieu">Obox Auto, Saint-Géréon</span></td><td>100</td></tr>
         </tbody>
       </table>
     </div>
