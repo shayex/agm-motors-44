@@ -26,7 +26,7 @@
 }
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden}
 body{
   margin:0;background:var(--bg);color:var(--txt);
   font-family:"Inter",system-ui,sans-serif;font-size:17px;line-height:1.65;
@@ -58,10 +58,22 @@ img{max-width:100%;display:block}
 .topbar nav a:hover{color:var(--txt);background:rgba(255,255,255,.06)}
 .nav-cta{padding:10px 18px!important;background:var(--accent);color:#fff!important;font-weight:600;box-shadow:0 6px 22px -6px var(--glow)}
 .nav-cta:hover{background:#FF6136!important;transform:translateY(-1px)}
-@media(max-width:900px){
-  .topbar .wrap{height:auto;padding-top:12px;padding-bottom:12px;flex-wrap:wrap;gap:10px}
-  .topbar nav{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
-  .topbar nav a{white-space:nowrap;padding:7px 11px;font-size:13px}
+/* Bouton hamburger (caché sur grand écran) */
+.nav-toggle{display:none;flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;
+  border:1px solid var(--line-strong);border-radius:10px;background:rgba(255,255,255,.04);cursor:pointer;padding:0 10px}
+.nav-toggle span{display:block;height:2px;width:100%;background:var(--txt);border-radius:2px;transition:transform .3s,opacity .3s}
+.topbar.open .nav-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.topbar.open .nav-toggle span:nth-child(2){opacity:0}
+.topbar.open .nav-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+@media(max-width:820px){
+  .nav-toggle{display:flex}
+  .topbar nav{position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:2px;
+    background:rgba(8,9,12,.97);backdrop-filter:blur(16px) saturate(140%);border-bottom:1px solid var(--line);
+    padding:0 20px;max-height:0;overflow:hidden;opacity:0;visibility:hidden;
+    transition:max-height .35s ease,opacity .3s ease,padding .35s ease,visibility .35s}
+  .topbar.open nav{max-height:min(80vh,520px);opacity:1;visibility:visible;padding:12px 20px 20px}
+  .topbar nav a{width:100%;padding:13px 12px;font-size:16px;border-radius:12px}
+  .nav-cta{text-align:center;margin-top:6px}
 }
 
 /* ══════ Hero ══════ */
@@ -441,6 +453,42 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
   font-size:12.5px;padding:1px 8px;border-radius:7px;margin-right:3px}
 @media(max-width:520px){.offres{grid-template-columns:1fr}}
 
+/* ══════ Adaptations téléphone / tablette ══════ */
+@media(max-width:820px){
+  section{padding:84px 0}
+  .hero{padding:120px 0 0}
+  .hero h1{font-size:clamp(34px,10.5vw,68px)}
+  .sec-head{margin-bottom:40px}
+  .sec-head h2{font-size:clamp(30px,7vw,52px)}
+  .about{gap:36px}
+  .next{gap:14px 22px}
+}
+@media(max-width:520px){
+  body{font-size:16px}
+  .wrap{padding:0 18px}
+  .hero{padding:104px 0 0}
+  .hero h1{font-size:clamp(30px,9.4vw,50px)}
+  .hero .lede{font-size:16px;margin:22px 0 30px}
+  .hero .actions{gap:10px}
+  .hero .actions .btn{flex:1 1 auto;justify-content:center}
+  .ticker{margin-top:56px}
+  .next{padding:20px;margin-top:44px}
+  .next .go{margin-left:0;width:100%;justify-content:center}
+  .scroll-hint{margin-top:30px}
+  section{padding:70px 0}
+  .sec-label{font-size:11px}
+  .counters div{padding:20px 18px}
+  .ev{grid-template-columns:64px 1fr;gap:14px;padding:16px}
+  .ev .hour{grid-column:2;font-size:13px}
+  .convoy{padding:24px 20px}
+  .cv-top h3{font-size:21px}
+  .card3d{width:min(330px,92vw)}
+  .card-agm-face{padding:24px 22px}
+  .offre{padding:20px}
+  .partner-cta{padding:26px 20px}
+  .marquee span{font-size:16px;padding:0 24px}
+}
+
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition-duration:.01ms!important}
   html{scroll-behavior:auto}
@@ -489,7 +537,10 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
 <header class="topbar" id="topbar">
   <div class="wrap">
     <a href="#" class="logo"><i></i>AGM MOTORS 44</a>
-    <nav>
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="navMenu">
       <a href="#asso">L'association</a>
       <a href="#staff">Membres</a>
       <a href="#rassemblements">Rassemblements</a>
@@ -1021,6 +1072,18 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
   };
   onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
   window.addEventListener('resize', onScroll, {passive:true});
+
+  /* Menu hamburger (téléphone) */
+  var navToggle = document.getElementById('navToggle');
+  var navMenu = document.getElementById('navMenu');
+  if (navToggle && navMenu){
+    function setMenu(open){
+      bar.classList.toggle('open', open);
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    navToggle.addEventListener('click', function(){ setMenu(!bar.classList.contains('open')); });
+    navMenu.addEventListener('click', function(e){ if (e.target.tagName === 'A') setMenu(false); });
+  }
 
   if (reduce){
     document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
