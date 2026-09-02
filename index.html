@@ -859,13 +859,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
 
   <div class="wrap">
     <div class="partners" id="partners">
-      <!-- Les cartes partenaires sont générées à partir de la liste ci-dessus,
-           puis insérées ici, avant ce bloc « Devenir partenaire ». -->
-      <div class="partner-cta reveal" id="partnerCta">
-        <h3>Devenir partenaire</h3>
-        <p>Vous êtes un professionnel de l'automobile en Loire-Atlantique et vous voulez être visible auprès de nos membres et des visiteurs de nos rassemblements ? On vous explique comment ça marche.</p>
-        <a href="#contact" class="btn btn-p">Nous contacter</a>
-      </div>
+      <!-- Les cartes partenaires sont générées ici à partir de la liste ci-dessus. -->
     </div>
   </div>
 
@@ -887,10 +881,10 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       var names = list.map(function(p){ return '<span>'+esc(String(p.nom).toUpperCase())+'</span>'; }).join('');
       mq.innerHTML = names + names;
     }
-    // Cartes partenaires, insérées avant le bloc « Devenir partenaire »
-    var cta = document.getElementById('partnerCta');
-    if (cta){
-      var cards = list.map(function(p, i){
+    // Cartes partenaires
+    var box = document.getElementById('partners');
+    if (box){
+      box.innerHTML = list.map(function(p, i){
         var delay = i * 70;
         var style = delay ? ' style="--d:'+delay+'ms"' : '';
         var logo = p.logo ? '<img src="'+esc(p.logo)+'" alt="'+esc(p.nom)+'" onerror="this.remove()">' : '';
@@ -901,7 +895,6 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
              +   '<p>'+esc(p.texte)+'</p>'
              + '</article>';
       }).join('');
-      cta.insertAdjacentHTML('beforebegin', cards);
     }
   })();
   </script>
@@ -1034,6 +1027,12 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       }).join('');
     })();
     </script>
+
+    <div class="partner-cta reveal" style="margin-top:24px">
+      <h3>Devenir partenaire</h3>
+      <p>Vous êtes un professionnel de l'automobile en Loire-Atlantique et vous voulez être visible auprès de nos membres et des visiteurs de nos rassemblements ? On vous explique comment ça marche.</p>
+      <a href="#contact" class="btn btn-p">Nous contacter</a>
+    </div>
   </div>
 </section>
 
