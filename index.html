@@ -494,7 +494,6 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       <a href="#staff">Membres</a>
       <a href="#rassemblements">Rassemblements</a>
       <a href="#convois">Convois</a>
-      <a href="#partenaires">Partenaires</a>
       <a href="#carte">Carte AGM</a>
       <a href="#contact" class="nav-cta">Nous rejoindre</a>
     </nav>
@@ -815,93 +814,14 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
   </div>
 </section>
 
-<!-- ============ PARTENAIRES ============ -->
-<section id="partenaires">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="sec-label">PARTENAIRES</span>
-      <h2>Ceux qui roulent avec nous</h2>
-      <p>Garages, préparateurs et commerces de la région qui soutiennent l'association, accueillent nos rassemblements ou proposent des tarifs à nos membres.</p>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════════════════════════
-       ▼▼▼  LES PARTENAIRES — MODIFIEZ TOUT ICI  ▼▼▼
-       Un objet { } entre accolades = un partenaire. Sur chaque ligne :
-         · nom   : le nom affiché (met aussi à jour le bandeau défilant)
-         · type  : la catégorie (Mécanique, Préparation…)
-         · texte : la petite description
-         · logo  : le fichier image dans le dossier "partenaires"
-                   (mettez "" s'il n'y a pas encore de logo)
-         · id    : identifiant technique, SANS espace ni accent, unique
-       Les initiales affichées à défaut de logo sont calculées
-       automatiquement à partir du nom.
-       Ajouter un partenaire : copiez une ligne, collez-la en dessous,
-       changez les valeurs (gardez la virgule en fin de ligne).
-       Retirer un partenaire : supprimez sa ligne entière.
-       ══════════════════════════════════════════════════════════════ -->
-  <script>
-  window.AGM_PARTENAIRES = [
-    { id:"lustro",         nom:"Lustr'O Detailing",    type:"Service de nettoyage et lustrage auto",    texte:"Préparateur esthétique automobile et nettoyage tissus d'ameublement ( canapé, tapis, matelas...).", logo:"partenaires/lustro.jpg" },
-    { id:"fresh", nom:"Fresh Custom", type:"Custom & détailing",  texte:"Customisation d’accessoires auto/maison, personnalisation automobile, détailing.", logo:"partenaires/fresh.jpeg" },
-    { id:"towing",    nom:"Towing & Co",    type:"Transporteur",  texte:"Transport de véhicules Transport de marchandises.", logo:"partenaires/towing.jpg" },
-    { id:"hugo", nom:"Hugo Lustrauto", type:"Préparateur esthétique",  texte:"Spécialisé dans le polissage & céramique.", logo:"partenaires/hugo.jpg" },
-    { id:"wrapping",     nom:"Wrapping Design",     type:"Esthétique",   texte:"Covering, ciel étoilé, vitre teinté, teintages optiques.", logo:"partenaires/wrapping.jpg" },
-    { id:"auto",    nom:"Autosur La Montagne",    type:"Contrôle technique", texte:"", logo:"partenaires/autosur.jpg" },
-    { id:"fbi",         nom:"FBI Motors",      type:"Soudeur Monteur", texte:"Fabrication de ligne d'echappement, soudure et montage.", logo:"partenaires/fbi.jpg" },
-    { id:"obox",         nom:"Obox Auto",      type:"Esthétique", texte:"Passionnés par l’esthétique automobile, nous redonnons éclat et protection à votre véhicule.", logo:"partenaires/obox.jpg" }
-  ];
-  </script>
-
-  <div class="marquee">
-    <div class="marquee-track" id="partnerMarquee"></div>
-  </div>
-
-  <div class="wrap">
-    <div class="partners" id="partners">
-      <!-- Les cartes partenaires sont générées ici à partir de la liste ci-dessus. -->
-    </div>
-  </div>
-
-  <script>
-  (function(){
-    var list = window.AGM_PARTENAIRES || [];
-    function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
-      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-    var STOP = {de:1,du:1,des:1,d:1,la:1,le:1,l:1,les:1,et:1,"à":1,au:1,aux:1,un:1,une:1};
-    function initials(nom){
-      var w = String(nom||'').split(/[\s'’]+/).filter(function(x){ return x && !STOP[x.toLowerCase()]; });
-      var a = w[0] ? w[0][0] : '';
-      var b = w[1] ? w[1][0] : (w[0] && w[0][1] ? w[0][1] : '');
-      return (a + b).toUpperCase();
-    }
-    // Bandeau défilant : les noms, répétés deux fois pour un défilement continu
-    var mq = document.getElementById('partnerMarquee');
-    if (mq){
-      var names = list.map(function(p){ return '<span>'+esc(String(p.nom).toUpperCase())+'</span>'; }).join('');
-      mq.innerHTML = names + names;
-    }
-    // Cartes partenaires
-    var box = document.getElementById('partners');
-    if (box){
-      box.innerHTML = list.map(function(p, i){
-        var delay = i * 70;
-        var style = delay ? ' style="--d:'+delay+'ms"' : '';
-        var logo = p.logo ? '<img src="'+esc(p.logo)+'" alt="'+esc(p.nom)+'" onerror="this.remove()">' : '';
-        return '<article class="partner reveal"'+style+' data-photo-id="'+esc(p.id)+'" data-photo-type="partner">'
-             +   '<div class="mark">'+esc(initials(p.nom))+logo+'</div>'
-             +   '<h3>'+esc(p.nom)+'</h3>'
-             +   '<div class="kind">'+esc(p.type)+'</div>'
-             +   '<p>'+esc(p.texte)+'</p>'
-             + '</article>';
-      }).join('');
-    }
-  })();
-  </script>
-</section>
-
 <!-- ============ CARTE AGM ============ -->
 <section id="carte">
+
+  <!-- Bandeau défilant des partenaires (généré depuis la liste des offres ci-dessous) -->
+  <div class="marquee">
+    <div class="marquee-track" id="carteMarquee"></div>
+  </div>
+
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="sec-label">CARTE AGM</span>
@@ -1005,6 +925,12 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       if (prix && window.AGM_CARTE_PRIX) prix.textContent = window.AGM_CARTE_PRIX;
       function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
         return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+      // Bandeau défilant : les noms des partenaires, répétés deux fois pour un défilement continu
+      var mq = document.getElementById('carteMarquee');
+      if (mq){
+        var names = list.map(function(o){ return '<span>'+esc(String(o.nom).toUpperCase())+'</span>'; }).join('');
+        mq.innerHTML = names + names;
+      }
       var STOP = {de:1,du:1,des:1,d:1,la:1,le:1,l:1,les:1,et:1,"à":1,au:1,aux:1,"&":1,"+":1};
       function initials(nom){
         var w = String(nom||'').split(/[\s'’]+/).filter(function(x){ return x && !STOP[x.toLowerCase()]; });
