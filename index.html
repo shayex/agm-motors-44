@@ -118,6 +118,7 @@ img{max-width:100%;display:block}
 .hero .actions{display:flex;flex-wrap:wrap;gap:12px;animation:floatUp 1s .34s cubic-bezier(.2,.7,.3,1) both}
 
 .btn{display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:99px;font-weight:600;font-size:15px;
+  font-family:inherit;cursor:pointer;
   position:relative;overflow:hidden;transition:transform .25s,background .25s,border-color .25s,box-shadow .25s}
 .btn>*{position:relative;z-index:1}
 .btn::after{content:"";position:absolute;top:0;left:-130%;width:55%;height:100%;z-index:0;pointer-events:none;
@@ -125,7 +126,7 @@ img{max-width:100%;display:block}
 .btn:hover::after{left:150%}
 .btn-p{background:var(--accent);color:#fff;box-shadow:0 12px 34px -12px var(--glow)}
 .btn-p:hover{background:#FF6136;transform:translateY(-2px);box-shadow:0 18px 40px -12px var(--glow)}
-.btn-s{border:1px solid var(--line-strong);color:var(--txt)}
+.btn-s{border:1px solid var(--line-strong);color:var(--txt);background:transparent}
 .btn-s:hover{border-color:var(--txt);background:rgba(255,255,255,.05);transform:translateY(-2px)}
 
 /* bandeau défilant */
