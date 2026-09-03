@@ -962,7 +962,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
             <span class="ca-year">Abonnement annuel</span>
           </div>
           <div class="ca-price"><b id="cartePrix">20€</b><span>/ an</span></div>
-          <div class="ca-members" id="caMembers" hidden><b id="caMembersN">0</b>&nbsp;membres nous font déjà confiance</div>
+          <div class="ca-members" id="caMembers" hidden><b id="caMembersN">0</b>&nbsp;membres ont déjà leur carte</div>
           <p class="ca-desc">Valable 12 mois · accès à toutes les offres partenaires ci-dessous.</p>
           <a href="#contact" class="btn btn-p">Obtenir ma carte</a>
         </div>
@@ -1004,6 +1004,9 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
          ══════════════════════════════════════════════════════════════ -->
     <script>
     window.AGM_CARTE_PRIX = "20€";
+    // Nombre de personnes qui ont pris la carte annuelle (différent du nombre
+    // de membres affichés). Mettez le vrai chiffre ici. Laissez "" pour masquer.
+    window.AGM_CARTE_MEMBRES = "";
     window.AGM_OFFRES = [
       { nom:"Lustr'O Detailing", logo:"partenaires/lustro.jpg", lignes:[
         "-15% nettoyage auto intérieur et extérieur, pose de céramique",
@@ -1127,9 +1130,11 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
   setAuto('rassemblements', rassemblements);
   setAuto('convois', convois);
 
-  // Badge « déjà X membres » sur la Carte AGM
+  // Badge « X membres ont déjà leur carte » — nombre de détenteurs de la carte
+  // annuelle (réglé à la main via AGM_CARTE_MEMBRES, indépendant de la liste des membres)
   var cm = document.getElementById('caMembers'), cmn = document.getElementById('caMembersN');
-  if (cm && cmn && membres > 0){ cmn.textContent = membres; cm.hidden = false; }
+  var nbCarte = parseInt(window.AGM_CARTE_MEMBRES, 10);
+  if (cm && cmn && nbCarte > 0){ cmn.textContent = nbCarte; cm.hidden = false; }
 })();
 </script>
 
