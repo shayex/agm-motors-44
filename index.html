@@ -32,9 +32,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-<!-- Carte interactive (Leaflet + fonds de carte OpenStreetMap/CARTO) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-
 <style>
 :root{
   --bg:#08090C;
@@ -528,29 +525,28 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
   .marquee span{font-size:16px;padding:0 24px}
 }
 
-/* ══════ Charte du convoi ══════ */
-.charte-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+/* ══════ Charte du convoi (bouton + pop-up) ══════ */
+.charte-btn{margin-top:20px}
+.modal{position:fixed;inset:0;z-index:1500;display:grid;place-items:center;padding:20px}
+.modal[hidden]{display:none}
+.modal-backdrop{position:absolute;inset:0;background:rgba(4,5,8,.72);backdrop-filter:blur(4px)}
+.modal-box{position:relative;z-index:1;width:min(560px,100%);max-height:86vh;overflow:auto;
+  background:linear-gradient(160deg,#151920,#0E1116);border:1px solid var(--line-strong);border-radius:20px;
+  padding:30px 30px 28px;box-shadow:0 40px 90px -30px rgba(0,0,0,.9);animation:modalIn .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes modalIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.modal-box h3{font-size:24px;font-stretch:112%;margin-bottom:8px}
+.modal-close{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--line-strong);background:rgba(255,255,255,.04);color:var(--txt);font-size:20px;line-height:1;cursor:pointer;transition:border-color .25s,color .25s}
+.modal-close:hover{border-color:var(--accent);color:var(--accent)}
+.charte-list{display:flex;flex-direction:column;gap:12px}
 .charte-item{display:flex;gap:16px;align-items:flex-start;background:var(--bg-2);border:1px solid var(--line);
-  border-radius:16px;padding:20px 22px;transition:border-color .35s,background .35s,transform .35s}
-.charte-item:hover{border-color:rgba(255,74,28,.4);background:var(--surface);transform:translateY(-3px)}
-.charte-item .n{flex:0 0 auto;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
-  font-family:"Archivo";font-weight:800;font-size:16px;color:#fff;
+  border-radius:14px;padding:16px 18px}
+.charte-item .n{flex:0 0 auto;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
+  font-family:"Archivo";font-weight:800;font-size:15px;color:#fff;
   background:linear-gradient(140deg,var(--accent),var(--accent-2));box-shadow:0 6px 16px -6px var(--glow)}
-.charte-item h4{font-size:16.5px;font-stretch:106%;margin:2px 0 6px}
-.charte-item p{font-size:14px;color:var(--txt-dim);line-height:1.5;margin:0}
-
-/* ══════ Carte interactive (Nos lieux) ══════ */
-.map-wrap{position:relative}
-#agm-map{height:440px;width:100%;border-radius:20px;border:1px solid var(--line);overflow:hidden;background:var(--bg-2);z-index:0}
-.map-fallback{color:var(--txt-dim);margin-top:14px;font-size:14.5px}
-.agm-pin{background:transparent;border:0}
-.agm-pin::before{content:"";display:block;width:16px;height:16px;border-radius:50%;background:var(--accent);
-  border:2px solid #fff;box-shadow:0 0 0 4px rgba(255,74,28,.25),0 2px 6px rgba(0,0,0,.5)}
-.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--surface);color:var(--txt);box-shadow:0 10px 30px -10px rgba(0,0,0,.8)}
-.leaflet-popup-content{font-family:"Inter",sans-serif;font-size:13.5px}
-.leaflet-container{font-family:"Inter",sans-serif}
-.leaflet-container a{color:var(--accent)}
-@media(max-width:520px){#agm-map{height:340px}}
+.charte-item h4{font-size:16px;font-stretch:106%;margin:2px 0 5px}
+.charte-item p{font-size:13.5px;color:var(--txt-dim);line-height:1.5;margin:0}
+body.modal-open{overflow:hidden}
 
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition-duration:.01ms!important}
@@ -608,7 +604,6 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       <a href="#staff">Membres</a>
       <a href="#rassemblements">Rassemblements</a>
       <a href="#convois">Convois</a>
-      <a href="#lieux">Nos lieux</a>
       <a href="#carte">Carte AGM</a>
       <a href="#contact" class="nav-cta">Nous rejoindre</a>
     </nav>
@@ -855,6 +850,9 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       <span class="sec-label">CONVOIS</span>
       <h2>On y va ensemble</h2>
       <p>Le point de rendez-vous est annoncé une semaine avant. Plein fait avant l'heure de départ, allure raisonnable, limitations respectées.</p>
+      <button type="button" class="btn btn-s charte-btn" id="charteBtn" aria-haspopup="dialog">
+        <span aria-hidden="true">📋</span> Comment se passe un convoi ?
+      </button>
     </div>
 
     <!-- ══════════════════════════════════════════════════════════════
@@ -964,79 +962,8 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       <div class="cv-stats"><div><b>35 km</b>distance</div><div><b>34</b>véhicules</div><div><b>Record</b>plus gros convoi</div></div>
     </article>
 
-    <div class="charte reveal" id="charte" style="margin-top:64px">
-      <h3 style="font-size:26px;font-stretch:112%;margin-bottom:8px">Comment se passe un convoi</h3>
-      <p class="dim" style="margin:0 0 26px;max-width:46em">Nos convois sont préparés et encadrés pour que la sortie reste agréable et sûre pour tout le monde.</p>
-      <div class="charte-grid">
-        <div class="charte-item"><span class="n">1</span><div><h4>Briefing avant le départ</h4><p>On se retrouve au point de rendez-vous : l'itinéraire, les pauses et les consignes de sécurité sont expliqués avant que le convoi ne démarre.</p></div></div>
-        <div class="charte-item"><span class="n">2</span><div><h4>Allure raisonnable</h4><p>On roule à une allure tranquille et on respecte les limitations. Pas de course : on profite de la route ensemble.</p></div></div>
-        <div class="charte-item"><span class="n">3</span><div><h4>On ne se double pas</h4><p>Chacun garde sa place dans le convoi. On ne dépasse pas les autres membres, sauf cas exceptionnel.</p></div></div>
-        <div class="charte-item"><span class="n">4</span><div><h4>Voiture de tête &amp; voiture de fin</h4><p>Une voiture ouvre la route en tête, une autre ferme la marche : le groupe reste soudé et personne n'est laissé derrière.</p></div></div>
-        <div class="charte-item"><span class="n">5</span><div><h4>Distances de sécurité</h4><p>On garde ses distances pour rouler groupés sans se coller, et réagir sereinement en cas d'imprévu.</p></div></div>
-      </div>
-    </div>
   </div>
 </section>
-
-<!-- ============ NOS LIEUX (carte interactive) ============ -->
-<section id="lieux">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="sec-label">NOS LIEUX</span>
-      <h2>Où on se retrouve</h2>
-      <p>Nos points de rendez-vous et destinations en Loire-Atlantique et alentours.</p>
-    </div>
-
-    <!-- ══════════════════════════════════════════════════════════════
-         ▼▼▼  LES LIEUX DE LA CARTE — MODIFIEZ TOUT ICI  ▼▼▼
-         Un objet { } = un point sur la carte : nom, lat, lng (coordonnées).
-         Pour trouver les coordonnées : sur Google Maps, clic droit sur le
-         lieu → cliquez sur les chiffres en haut du menu (ex. 47.2184, -1.5536).
-         Ajouter : copiez une ligne. Retirer : supprimez-la.
-         ══════════════════════════════════════════════════════════════ -->
-    <script>
-    window.AGM_LIEUX = [
-      { nom:"Nantes", lat:47.2184, lng:-1.5536 },
-      { nom:"Ancenis — Domaine des Lys", lat:47.3660, lng:-1.1780 },
-      { nom:"Saint-Géréon — Obox Auto", lat:47.3560, lng:-1.2050 },
-      { nom:"Vallet", lat:47.1620, lng:-1.2660 },
-      { nom:"La Chapelle-sur-Erdre", lat:47.2990, lng:-1.5540 }
-    ];
-    </script>
-
-    <div class="map-wrap reveal">
-      <div id="agm-map"></div>
-      <p class="map-fallback" id="mapFallback" hidden>Carte momentanément indisponible —
-        <a href="https://www.openstreetmap.org/#map=9/47.28/-1.40" target="_blank" rel="noopener">voir sur OpenStreetMap</a>.</p>
-    </div>
-  </div>
-</section>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script>
-(function(){
-  var el = document.getElementById('agm-map'); if (!el) return;
-  var pts = window.AGM_LIEUX || [];
-  function fallback(){ var f = document.getElementById('mapFallback'); if (f) f.hidden = false; el.style.display = 'none'; }
-  if (!window.L){ fallback(); return; }
-  try {
-    var map = L.map(el, { scrollWheelZoom:false });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution:'© OpenStreetMap © CARTO', subdomains:'abcd', maxZoom:19
-    }).addTo(map);
-    var icon = L.divIcon({ className:'agm-pin', html:'', iconSize:[16,16], iconAnchor:[8,8], popupAnchor:[0,-10] });
-    var bounds = [];
-    pts.forEach(function(p){
-      if (typeof p.lat !== 'number' || typeof p.lng !== 'number') return;
-      L.marker([p.lat, p.lng], { icon:icon }).addTo(map).bindPopup('<b>'+String(p.nom||'').replace(/</g,'&lt;')+'</b>');
-      bounds.push([p.lat, p.lng]);
-    });
-    if (bounds.length > 1) map.fitBounds(bounds, { padding:[40,40] });
-    else if (bounds.length === 1) map.setView(bounds[0], 12);
-    else map.setView([47.28, -1.40], 9);
-  } catch(e){ fallback(); }
-})();
-</script>
 
 <!-- ============ CARTE AGM ============ -->
 <section id="carte">
@@ -1381,6 +1308,35 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
     else img.addEventListener('load', go);
   }
   document.querySelectorAll('.offre-mark img, .partner .mark img').forEach(tint);
+})();
+</script>
+
+<!-- Pop-up « Comment se passe un convoi » -->
+<div class="modal" id="charteModal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="charteTitle">
+    <button type="button" class="modal-close" data-close aria-label="Fermer">×</button>
+    <h3 id="charteTitle">Comment se passe un convoi</h3>
+    <p class="dim" style="margin:0 0 20px">Nos convois sont préparés et encadrés pour que la sortie reste agréable et sûre pour tout le monde.</p>
+    <div class="charte-list">
+      <div class="charte-item"><span class="n">1</span><div><h4>Briefing avant le départ</h4><p>On se retrouve au point de rendez-vous : l'itinéraire, les pauses et les consignes de sécurité sont expliqués avant que le convoi ne démarre.</p></div></div>
+      <div class="charte-item"><span class="n">2</span><div><h4>Allure raisonnable</h4><p>On roule à une allure tranquille et on respecte les limitations. Pas de course : on profite de la route ensemble.</p></div></div>
+      <div class="charte-item"><span class="n">3</span><div><h4>On ne se double pas</h4><p>Chacun garde sa place dans le convoi. On ne dépasse pas les autres membres, sauf cas exceptionnel.</p></div></div>
+      <div class="charte-item"><span class="n">4</span><div><h4>Voiture de tête &amp; voiture de fin</h4><p>Une voiture ouvre la route en tête, une autre ferme la marche : le groupe reste soudé et personne n'est laissé derrière.</p></div></div>
+      <div class="charte-item"><span class="n">5</span><div><h4>Distances de sécurité</h4><p>On garde ses distances pour rouler groupés sans se coller, et réagir sereinement en cas d'imprévu.</p></div></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var modal = document.getElementById('charteModal');
+  var btn = document.getElementById('charteBtn');
+  if (!modal || !btn) return;
+  function open(){ modal.hidden = false; document.body.classList.add('modal-open'); }
+  function close(){ modal.hidden = true; document.body.classList.remove('modal-open'); }
+  btn.addEventListener('click', open);
+  modal.addEventListener('click', function(e){ if (e.target.hasAttribute('data-close')) close(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !modal.hidden) close(); });
 })();
 </script>
 
