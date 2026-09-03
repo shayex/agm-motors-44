@@ -452,6 +452,20 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
   background:linear-gradient(120deg,#fff,#9AA6B6);-webkit-background-clip:text;background-clip:text;color:transparent}
 .ca-price span{color:var(--txt-dim);font-size:16px}
 .ca-desc{color:var(--txt-dim);font-size:14.5px;margin:0 0 22px;position:relative}
+.ca-members{display:inline-flex;align-items:center;margin:0 0 16px;position:relative;
+  border:1px solid rgba(255,74,28,.35);background:rgba(255,74,28,.1);border-radius:99px;
+  padding:6px 15px;font-size:13.5px;color:var(--txt)}
+.ca-members b{color:var(--accent);font-family:"Archivo";font-weight:800;font-size:15px}
+
+/* Compte à rebours du prochain rassemblement */
+.countdown{display:inline-flex;align-items:center;gap:16px;margin-top:24px;padding:14px 22px 14px 18px;
+  border:1px solid var(--line-strong);border-radius:16px;background:var(--surface);
+  position:relative;overflow:hidden}
+.countdown::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(var(--accent),var(--accent-2))}
+.countdown .cd-num{font-family:"Archivo";font-weight:900;font-stretch:118%;font-size:clamp(32px,5vw,44px);line-height:1;
+  background:linear-gradient(120deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.countdown .cd-txt{font-size:13px;color:var(--txt-dim);line-height:1.3;text-align:left}
+.countdown .cd-txt b{display:block;color:var(--txt);font-family:"Archivo";font-weight:700;font-size:15px;font-stretch:108%;margin-top:2px}
 
 .offres{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
 .offre{position:relative;display:flex;flex-direction:column;gap:16px;overflow:hidden;
@@ -712,6 +726,10 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       <span class="sec-label">RASSEMBLEMENTS</span>
       <h2>Les prochaines dates</h2>
       <p>Entrée libre pour les visiteurs comme pour les exposants. Pas besoin d'être membre pour venir.</p>
+      <div class="countdown reveal" id="countdown" hidden>
+        <span class="cd-num" id="cdNum">0</span>
+        <span class="cd-txt"><span id="cdLabel">jours avant</span><br><b id="cdTitle"></b></span>
+      </div>
     </div>
 
     <!-- ══════════════════════════════════════════════════════════════
@@ -722,6 +740,9 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
            · titre   : le nom du rassemblement
            · lieu    : l'endroit
            · horaire : les horaires (ex. "09h — 12h")
+           · date    : (facultatif) la date au format AAAA-MM-JJ (ex. "2026-09-27").
+                       Si vous la renseignez, un compte à rebours « J-X » s'affiche
+                       automatiquement au-dessus de la liste.
          Tant que la liste est vide ( [] ), un message « pas encore de date »
          s'affiche. Ajoutez une ligne et la carte apparaît automatiquement.
          Ajouter une date : copiez une ligne, collez-la, changez les valeurs
@@ -732,7 +753,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
     <script>
     window.AGM_RASSEMBLEMENTS = [
       // Exemple (à copier quand vous aurez une date) :
-      // { jour:"27", mois:"Sept", titre:"Cars & Coffee de la Chapelle", lieu:"Parking du complexe sportif, La Chapelle-sur-Erdre", horaire:"09h — 12h" },
+      // { jour:"27", mois:"Sept", titre:"Cars & Coffee de la Chapelle", lieu:"Parking du complexe sportif, La Chapelle-sur-Erdre", horaire:"09h — 12h", date:"2026-09-27" },
     ];
     </script>
 
@@ -744,6 +765,27 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
       var list = window.AGM_RASSEMBLEMENTS || [];
       function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
         return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+      /* Compte à rebours vers le prochain rassemblement daté */
+      (function(){
+        var cd = document.getElementById('countdown'); if (!cd) return;
+        var today = new Date(); today.setHours(0,0,0,0);
+        var next = null;
+        list.forEach(function(e){
+          if (!e.date) return;
+          var d = new Date(e.date + 'T00:00:00'); if (isNaN(d)) return;
+          if (d >= today && (!next || d < next.d)) next = { d:d, e:e };
+        });
+        if (!next) return;
+        var days = Math.round((next.d - today) / 86400000);
+        var num = document.getElementById('cdNum');
+        var lab = document.getElementById('cdLabel');
+        var tit = document.getElementById('cdTitle');
+        if (days === 0){ num.textContent = "🏁"; lab.textContent = "C'est aujourd'hui !"; }
+        else { num.textContent = days; lab.textContent = (days > 1 ? "jours avant" : "jour avant"); }
+        if (tit) tit.textContent = next.e.titre || '';
+        cd.hidden = false;
+      })();
       if (!list.length){
         box.innerHTML = '<div class="ev-empty reveal">'
           + '<h3>Pas encore de date programmée</h3>'
@@ -920,6 +962,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
             <span class="ca-year">Abonnement annuel</span>
           </div>
           <div class="ca-price"><b id="cartePrix">20€</b><span>/ an</span></div>
+          <div class="ca-members" id="caMembers" hidden><b id="caMembersN">0</b>&nbsp;membres nous font déjà confiance</div>
           <p class="ca-desc">Valable 12 mois · accès à toutes les offres partenaires ci-dessous.</p>
           <a href="#contact" class="btn btn-p">Obtenir ma carte</a>
         </div>
@@ -1083,6 +1126,10 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
   setAuto('membres', membres);
   setAuto('rassemblements', rassemblements);
   setAuto('convois', convois);
+
+  // Badge « déjà X membres » sur la Carte AGM
+  var cm = document.getElementById('caMembers'), cmn = document.getElementById('caMembersN');
+  if (cm && cmn && membres > 0){ cmn.textContent = membres; cm.hidden = false; }
 })();
 </script>
 
