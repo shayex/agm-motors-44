@@ -546,6 +546,11 @@ body.modal-open{overflow:hidden}
 
 /* ---- Galerie photos ---- */
 .gallery-cta{text-align:center;margin-top:48px}
+.gal-group{margin-top:38px}
+.gal-group:first-child{margin-top:0}
+.gal-group-title{font-size:20px;font-stretch:110%;margin:0 0 15px;display:flex;align-items:center;gap:12px;color:var(--txt)}
+.gal-group-title::before{content:"";flex:0 0 auto;width:8px;height:8px;border-radius:50%;
+  background:linear-gradient(var(--accent),var(--accent-2));box-shadow:0 0 10px var(--glow)}
 .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
 .gallery .gcell{position:relative;padding:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;
   cursor:pointer;background:var(--surface);aspect-ratio:4/3;display:block;transition:border-color .25s,transform .25s}
@@ -887,9 +892,14 @@ body.modal-open{overflow:hidden}
     <!-- ══════════════════════════════════════════════════════════════
          ▼▼▼  LA GALERIE PHOTOS — MODIFIEZ TOUT ICI  ▼▼▼
          Chaque photo = un objet { } entre accolades. Sur chaque ligne :
-           · src     : le chemin du fichier, déposé dans le dossier « galerie/ »
-                       (ex. "galerie/rasso-juillet-01.jpg")
-           · legende : (facultatif) le texte affiché sous la photo agrandie
+           · src       : le chemin du fichier, déposé dans le dossier « galerie/ »
+                         (ex. "galerie/rasso-juillet-01.jpg")
+           · evenement : (facultatif) le nom de l'évènement. Les photos qui portent
+                         le MÊME nom sont regroupées ensemble sous ce titre dans la
+                         galerie. Laissez vide ("") pour une photo sans regroupement.
+           · legende   : (facultatif) le texte affiché sous la photo agrandie
+         Astuce : gardez le même texte « evenement » (à la lettre près) pour toutes
+         les photos d'une même sortie — c'est ce qui les range dans le même bloc.
          Pour ajouter une photo : déposez le fichier dans le dossier « galerie/ »
          sur GitHub, puis copiez une ligne ci-dessous, collez-la et changez les
          valeurs (gardez la virgule en fin de ligne). Pour retirer : supprimez la
@@ -898,11 +908,12 @@ body.modal-open{overflow:hidden}
     <script>
     window.AGM_GALERIE = [
       // Exemple (à copier quand vous aurez des photos) :
-      // { src:"galerie/rasso-juillet-01.jpg", legende:"AGM Motors — Domaine des Lys, Ancenis (juillet 2026)" },
+      // { src:"galerie/ancenis-01.jpg", evenement:"AGM Motors — Ancenis (juillet 2026)", legende:"Alignement au Domaine des Lys" },
+      // { src:"galerie/ancenis-02.jpg", evenement:"AGM Motors — Ancenis (juillet 2026)", legende:"" },
     ];
     </script>
 
-    <div class="gallery" id="galleryGrid"></div>
+    <div class="gallery-groups" id="galleryGrid"></div>
 
     <div class="lightbox" id="lightbox" hidden>
       <button type="button" class="lb-close" data-lbclose aria-label="Fermer">×</button>
@@ -930,11 +941,24 @@ body.modal-open{overflow:hidden}
         return;
       }
 
-      grid.innerHTML = list.map(function(p, i){
-        var cap = p.legende ? esc(p.legende) : '';
-        return '<button type="button" class="gcell reveal" data-i="'+i+'" style="--d:'+(i%6*70)+'ms">'
-             +   '<img src="'+esc(p.src)+'" alt="'+cap+'" loading="lazy">'
-             + '</button>';
+      /* Regroupement par nom d'évènement (l'ordre d'apparition est conservé) */
+      var groups = [], byName = {};
+      list.forEach(function(p, gi){
+        var nom = (p.evenement || '').trim();
+        var key = nom || '__sans__';
+        if (!byName[key]){ byName[key] = { nom:nom, items:[] }; groups.push(byName[key]); }
+        byName[key].items.push({ p:p, gi:gi });
+      });
+
+      grid.innerHTML = groups.map(function(g){
+        var head = g.nom ? '<h3 class="gal-group-title">'+esc(g.nom)+'</h3>' : '';
+        var cells = g.items.map(function(it, j){
+          var cap = it.p.legende ? esc(it.p.legende) : (it.p.evenement ? esc(it.p.evenement) : '');
+          return '<button type="button" class="gcell reveal" data-i="'+it.gi+'" style="--d:'+(j%6*70)+'ms">'
+               +   '<img src="'+esc(it.p.src)+'" alt="'+cap+'" loading="lazy">'
+               + '</button>';
+        }).join('');
+        return '<div class="gal-group reveal">'+head+'<div class="gallery">'+cells+'</div></div>';
       }).join('');
 
       /* --- Visionneuse plein écran (lightbox) --- */
@@ -945,10 +969,11 @@ body.modal-open{overflow:hidden}
       function show(i){
         cur = (i + list.length) % list.length;
         var p = list[cur];
+        var txt = p.legende || p.evenement || '';
         lbImg.src = p.src;
-        lbImg.alt = p.legende || '';
-        lbCap.textContent = p.legende || '';
-        lbCap.hidden = !p.legende;
+        lbImg.alt = txt;
+        lbCap.textContent = txt;
+        lbCap.hidden = !txt;
       }
       function open(i){ show(i); lb.hidden = false; document.body.classList.add('modal-open'); }
       function close(){ lb.hidden = true; lbImg.src = ''; document.body.classList.remove('modal-open'); }
