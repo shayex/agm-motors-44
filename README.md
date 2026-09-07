@@ -132,10 +132,14 @@ dans `index.html` :
 - Ajoutez une ligne dans `window.AGM_GALERIE` :
 
   ```js
-  { src:"galerie/rasso-juillet-01.jpg", legende:"AGM Motors — Ancenis (juillet 2026)" },
+  { src:"galerie/ancenis-01.jpg", evenement:"AGM Motors — Ancenis (juillet 2026)", legende:"Alignement au Domaine des Lys" },
   ```
 
   - `src` : le fichier déposé (chemin `galerie/…`).
+  - `evenement` : facultatif. **Les photos qui portent le même nom d'évènement
+    sont regroupées ensemble** sous ce titre dans la galerie. Gardez donc le
+    même texte (à la lettre près) pour toutes les photos d'une même sortie.
+    Laissez `""` pour une photo sans regroupement.
   - `legende` : facultatif, le texte sous la photo agrandie.
 - Un clic ouvre la photo en grand ; flèches ‹ › ou touches du clavier pour
   naviguer, Échap pour fermer.
