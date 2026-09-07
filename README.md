@@ -118,6 +118,31 @@ Chaque partenaire tient sur une ligne :
 
 ---
 
+## Galerie photos
+
+La section **Galerie** (bouton « 📸 Voir la galerie photos » dans les
+Évènements) affiche les photos déposées dans le dossier `galerie/`. Repère
+dans `index.html` :
+
+```
+▼▼▼  LA GALERIE PHOTOS — MODIFIEZ TOUT ICI  ▼▼▼
+```
+
+- Déposez vos images dans le dossier `galerie/` sur GitHub.
+- Ajoutez une ligne dans `window.AGM_GALERIE` :
+
+  ```js
+  { src:"galerie/rasso-juillet-01.jpg", legende:"AGM Motors — Ancenis (juillet 2026)" },
+  ```
+
+  - `src` : le fichier déposé (chemin `galerie/…`).
+  - `legende` : facultatif, le texte sous la photo agrandie.
+- Un clic ouvre la photo en grand ; flèches ‹ › ou touches du clavier pour
+  naviguer, Échap pour fermer.
+- Liste vide → un message « Les photos arrivent bientôt » s'affiche.
+
+---
+
 ## Carte AGM (abonnement annuel) et ses offres
 
 L'onglet **Carte AGM** présente l'abonnement à l'année et la liste des remises
