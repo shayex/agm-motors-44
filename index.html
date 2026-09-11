@@ -791,7 +791,9 @@ body.modal-open{overflow:hidden}
         return (a + b).toUpperCase();
       }
       crew.innerHTML = list.map(function(m, i){
-        var delay = i * 80;
+        /* délai plafonné et cyclique : chaque carte s'anime au plus ~350ms après
+           son entrée à l'écran, même quand la liste est très longue (mobile inclus) */
+        var delay = (i % 6) * 70;
         var style = delay ? ' style="--d:'+delay+'ms"' : '';
         var img = m.photo ? '<img src="'+esc(m.photo)+'" alt="'+esc(m.nom)+'" onerror="this.remove()">' : '';
         return '<article class="card reveal"'+style+' data-photo-id="'+esc(m.id)+'" data-photo-type="crew">'
@@ -885,7 +887,7 @@ body.modal-open{overflow:hidden}
         return;
       }
       box.innerHTML = list.map(function(e, i){
-        var delay = i * 90;
+        var delay = (i % 6) * 90;
         var style = delay ? ' style="--d:'+delay+'ms"' : '';
         return '<article class="ev reveal"'+style+'>'
              +   '<div class="date"><span class="d">'+esc(e.jour)+'</span><span class="m">'+esc(e.mois)+'</span></div>'
@@ -1168,7 +1170,7 @@ body.modal-open{overflow:hidden}
           + '</div>';
       } else {
         box.innerHTML = list.map(function(c, i){
-          var delay = i * 90;
+          var delay = (i % 6) * 90;
           var style = delay ? ' style="--d:'+delay+'ms"' : '';
           var etapes = (c.etapes||[]).map(function(e){
             var sous = e.sous ? '<span class="sub">'+esc(e.sous)+'</span>' : '';
