@@ -184,7 +184,13 @@ section{padding:120px 0;position:relative}
 .card .bio{font-size:12.5px;color:var(--txt-dim);line-height:1.4;max-height:0;opacity:0;overflow:hidden;
   transition:max-height .45s cubic-bezier(.2,.7,.3,1),opacity .35s,margin .45s}
 .card:hover .bio{max-height:90px;opacity:1;margin-top:7px}
-@media(hover:none){.card .bio{max-height:90px;opacity:1;margin-top:7px}}
+/* Sur écran tactile (pas de survol possible) : la description est visible, et la
+   photo passe du N&B à la couleur quand la carte apparaît à l'écran (au scroll) */
+@media(hover:none){
+  .card .bio{max-height:90px;opacity:1;margin-top:7px}
+  .card.in img{filter:grayscale(0)}
+  .card.in{border-color:rgba(255,74,28,.32)}
+}
 @media(max-width:520px){.crew{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
   .card .info{padding:12px}.card h3{font-size:15px}}
 
@@ -340,10 +346,10 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
   background-image:conic-gradient(#fff 90deg,transparent 0 180deg,#fff 0 270deg,transparent 0);background-size:8px 8px}
 .pl-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:99px;z-index:1;
   background:linear-gradient(90deg,var(--accent),var(--accent-2));box-shadow:0 0 20px var(--glow);
-  animation:plFill 1.8s cubic-bezier(.45,.05,.2,1) forwards}
+  animation:plFill 2.3s cubic-bezier(.45,.05,.2,1) forwards}
 .pl-car{position:absolute;top:50%;left:0;width:14px;height:14px;border-radius:50%;background:#fff;z-index:2;
   transform:translate(-50%,-50%);box-shadow:0 0 16px 4px var(--glow),0 0 3px #fff;
-  animation:plRun 1.8s cubic-bezier(.45,.05,.2,1) forwards}
+  animation:plRun 2.3s cubic-bezier(.45,.05,.2,1) forwards}
 @keyframes plFill{from{width:0}to{width:100%}}
 @keyframes plRun{from{left:0}to{left:100%}}
 .pl-label{font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--txt-dim);
@@ -650,11 +656,14 @@ body.modal-open{overflow:hidden}
   }
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduce){ hide(); return; }
-  var MIN = 1900, start = Date.now();
+  // Durée mini d'affichage : le temps que la barre de chargement se remplisse
+  // entièrement (2,3s) et reste visible un court instant — sinon, sur un
+  // téléphone où la page charge vite, l'écran de lancement passe trop vite.
+  var MIN = 2600, start = Date.now();
   window.addEventListener('load', function(){
     setTimeout(hide, Math.max(0, MIN - (Date.now() - start)));
   });
-  setTimeout(hide, 4000);   // filet de sécurité : ne jamais bloquer l'accès au site
+  setTimeout(hide, 5000);   // filet de sécurité : ne jamais bloquer l'accès au site
 })();
 </script>
 
