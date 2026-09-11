@@ -167,24 +167,26 @@ section{padding:120px 0;position:relative}
 @media(max-width:900px){.asso-logo{width:min(220px,60%)}}
 
 /* ══════ STAFF : cartes photo ══════ */
-.crew{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:22px}
-.card{position:relative;border-radius:22px;overflow:hidden;background:var(--surface);border:1px solid var(--line);
+.crew{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px}
+.card{position:relative;border-radius:16px;overflow:hidden;background:var(--surface);border:1px solid var(--line);
   aspect-ratio:1/1;transition:transform .45s cubic-bezier(.2,.7,.3,1),border-color .45s,box-shadow .45s}
-.card:hover{transform:translateY(-7px);border-color:rgba(255,74,28,.5);box-shadow:0 26px 50px -24px rgba(0,0,0,.9)}
+.card:hover{transform:translateY(-6px);border-color:rgba(255,74,28,.5);box-shadow:0 22px 44px -24px rgba(0,0,0,.9)}
 .card .ph{position:absolute;inset:0;display:grid;place-items:center;
   background:linear-gradient(150deg,#242C38,#131820);
-  font-family:"Archivo";font-weight:900;font-stretch:125%;font-size:56px;color:rgba(255,255,255,.13);letter-spacing:.04em}
+  font-family:"Archivo";font-weight:900;font-stretch:125%;font-size:40px;color:rgba(255,255,255,.13);letter-spacing:.04em}
 .card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   filter:grayscale(1) contrast(1.06);transition:filter .5s,transform .7s cubic-bezier(.2,.7,.3,1)}
 .card:hover img{filter:grayscale(0);transform:scale(1.06)}
-.card .scrim{position:absolute;inset:0;background:linear-gradient(transparent 38%,rgba(6,7,10,.82) 76%,rgba(6,7,10,.96))}
-.card .info{position:absolute;left:0;right:0;bottom:0;padding:20px}
-.card .role{font-size:11.5px;font-weight:600;letter-spacing:.14em;color:var(--accent);margin-bottom:6px;text-transform:uppercase}
-.card h3{font-size:21px;font-stretch:110%}
-.card .bio{font-size:14px;color:var(--txt-dim);line-height:1.45;max-height:0;opacity:0;overflow:hidden;
+.card .scrim{position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(6,7,10,.82) 78%,rgba(6,7,10,.96))}
+.card .info{position:absolute;left:0;right:0;bottom:0;padding:14px}
+.card .role{font-size:10px;font-weight:600;letter-spacing:.13em;color:var(--accent);margin-bottom:4px;text-transform:uppercase}
+.card h3{font-size:16.5px;font-stretch:108%;line-height:1.15}
+.card .bio{font-size:12.5px;color:var(--txt-dim);line-height:1.4;max-height:0;opacity:0;overflow:hidden;
   transition:max-height .45s cubic-bezier(.2,.7,.3,1),opacity .35s,margin .45s}
-.card:hover .bio{max-height:100px;opacity:1;margin-top:9px}
-@media(hover:none){.card .bio{max-height:100px;opacity:1;margin-top:9px}}
+.card:hover .bio{max-height:90px;opacity:1;margin-top:7px}
+@media(hover:none){.card .bio{max-height:90px;opacity:1;margin-top:7px}}
+@media(max-width:520px){.crew{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+  .card .info{padding:12px}.card h3{font-size:15px}}
 
 /* ══════ Événements ══════ */
 .events{display:grid;gap:14px}
