@@ -120,10 +120,11 @@ Chaque partenaire tient sur une ligne :
 
 ## Galerie photos
 
-La section **Galerie** (bouton « 📸 Voir la galerie photos » dans les
-Évènements) est organisée en **albums** : **une couverture par évènement**.
-On clique sur un album pour voir toutes ses photos, puis sur une photo pour
-l'ouvrir en plein écran. Les photos se déposent dans le dossier `galerie/`.
+Le bouton « 📸 Voir la galerie photos » (dans les Évènements) ouvre la galerie
+dans un **pop-up plein écran**. Elle est organisée en **albums** : **une
+couverture par évènement**. On clique sur un album pour voir toutes ses photos,
+puis sur une photo pour l'ouvrir en plein écran. « ‹ Fermer » (ou Échap) referme
+le pop-up. Les photos se déposent dans le dossier `galerie/`.
 Repère dans `index.html` :
 
 ```
