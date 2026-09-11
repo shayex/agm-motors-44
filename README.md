@@ -121,8 +121,10 @@ Chaque partenaire tient sur une ligne :
 ## Galerie photos
 
 La section **Galerie** (bouton « 📸 Voir la galerie photos » dans les
-Évènements) affiche les photos déposées dans le dossier `galerie/`. Repère
-dans `index.html` :
+Évènements) est organisée en **albums** : **une couverture par évènement**.
+On clique sur un album pour voir toutes ses photos, puis sur une photo pour
+l'ouvrir en plein écran. Les photos se déposent dans le dossier `galerie/`.
+Repère dans `index.html` :
 
 ```
 ▼▼▼  LA GALERIE PHOTOS — MODIFIEZ TOUT ICI  ▼▼▼
@@ -136,13 +138,15 @@ dans `index.html` :
   ```
 
   - `src` : le fichier déposé (chemin `galerie/…`).
-  - `evenement` : facultatif. **Les photos qui portent le même nom d'évènement
-    sont regroupées ensemble** sous ce titre dans la galerie. Gardez donc le
-    même texte (à la lettre près) pour toutes les photos d'une même sortie.
-    Laissez `""` pour une photo sans regroupement.
+  - `evenement` : **c'est le nom de l'album.** Toutes les photos qui portent le
+    même nom forment **un seul album** (une seule couverture dans la galerie).
+    Gardez donc exactement le même texte pour toutes les photos d'une même
+    sortie. Sans nom (`""`) → album « Autres photos ».
   - `legende` : facultatif, le texte sous la photo agrandie.
-- Un clic ouvre la photo en grand ; flèches ‹ › ou touches du clavier pour
-  naviguer, Échap pour fermer.
+- La **couverture** d'un album = sa 1re photo dans la liste. Le badge indique
+  le nombre de photos.
+- Dans un album : clic sur une photo → plein écran ; flèches ‹ › ou clavier
+  pour naviguer, Échap pour revenir. « ‹ Retour aux albums » pour ressortir.
 - Liste vide → un message « Les photos arrivent bientôt » s'affiche.
 
 ---

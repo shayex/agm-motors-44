@@ -546,11 +546,40 @@ body.modal-open{overflow:hidden}
 
 /* ---- Galerie photos ---- */
 .gallery-cta{text-align:center;margin-top:48px}
-.gal-group{margin-top:38px}
-.gal-group:first-child{margin-top:0}
-.gal-group-title{font-size:20px;font-stretch:110%;margin:0 0 15px;display:flex;align-items:center;gap:12px;color:var(--txt)}
-.gal-group-title::before{content:"";flex:0 0 auto;width:8px;height:8px;border-radius:50%;
-  background:linear-gradient(var(--accent),var(--accent-2));box-shadow:0 0 10px var(--glow)}
+/* Albums (une couverture par évènement) */
+.albums{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.album{position:relative;padding:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  cursor:pointer;background:var(--surface);aspect-ratio:4/3;display:block;text-align:left;
+  transition:border-color .25s,transform .25s,box-shadow .25s}
+.album:hover{border-color:rgba(255,74,28,.5);transform:translateY(-4px);box-shadow:0 18px 40px -22px rgba(0,0,0,.8)}
+.album img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+.album:hover img{transform:scale(1.06)}
+.album .album-meta{position:absolute;left:0;right:0;bottom:0;padding:16px 16px 14px;
+  background:linear-gradient(transparent,rgba(6,7,10,.86));display:flex;flex-direction:column;gap:3px}
+.album .album-name{font-family:"Archivo";font-weight:800;font-stretch:106%;font-size:17px;color:#fff;line-height:1.2}
+.album .album-count{font-size:12.5px;font-weight:600;letter-spacing:.06em;color:var(--accent-2);text-transform:uppercase}
+.album .album-badge{position:absolute;top:12px;right:12px;display:inline-flex;align-items:center;gap:6px;
+  padding:6px 11px;border-radius:999px;font-size:12px;font-weight:700;color:#fff;
+  background:rgba(8,9,12,.6);backdrop-filter:blur(3px);border:1px solid rgba(255,255,255,.15)}
+/* Vue d'un album (plein écran) */
+.album-view{position:fixed;inset:0;z-index:1900;background:var(--bg);overflow:auto;
+  animation:modalIn .28s cubic-bezier(.2,.8,.2,1)}
+.album-view[hidden]{display:none}
+.av-bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:16px;
+  padding:16px 22px;background:rgba(8,9,12,.82);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.av-back{font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+  padding:9px 15px;border-radius:999px;border:1px solid var(--line-strong);background:rgba(255,255,255,.04);
+  color:var(--txt);font-size:14px;font-weight:600;transition:border-color .25s,color .25s}
+.av-back:hover{border-color:var(--accent);color:var(--accent)}
+.av-title{font-family:"Archivo";font-weight:800;font-stretch:108%;font-size:19px;margin:0;color:var(--txt);
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.av-count{font-size:13px;color:var(--txt-dim);white-space:nowrap}
+.av-grid{padding:22px}
+@media(max-width:560px){
+  .av-bar{padding:12px 14px;gap:10px}
+  .av-back span{display:none}.av-back{padding:9px 12px}
+  .av-count{display:none}.av-grid{padding:14px}
+}
 .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
 .gallery .gcell{position:relative;padding:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;
   cursor:pointer;background:var(--surface);aspect-ratio:4/3;display:block;transition:border-color .25s,transform .25s}
@@ -886,7 +915,7 @@ body.modal-open{overflow:hidden}
     <div class="sec-head reveal">
       <span class="sec-label">GALERIE</span>
       <h2>En images</h2>
-      <p>Un aperçu de nos évènements et de nos sorties. Cliquez sur une photo pour l'agrandir.</p>
+      <p>Un album par évènement. Cliquez sur un album pour voir toutes ses photos.</p>
     </div>
 
     <!-- ══════════════════════════════════════════════════════════════
@@ -894,12 +923,14 @@ body.modal-open{overflow:hidden}
          Chaque photo = un objet { } entre accolades. Sur chaque ligne :
            · src       : le chemin du fichier, déposé dans le dossier « galerie/ »
                          (ex. "galerie/rasso-juillet-01.jpg")
-           · evenement : (facultatif) le nom de l'évènement. Les photos qui portent
-                         le MÊME nom sont regroupées ensemble sous ce titre dans la
-                         galerie. Laissez vide ("") pour une photo sans regroupement.
+           · evenement : le nom de l'évènement. Toutes les photos qui portent le
+                         MÊME nom forment UN ALBUM (une seule vignette « couverture »
+                         dans la galerie ; un clic ouvre l'album et affiche toutes
+                         ses photos). Sans nom ("" ou absent) → album « Autres photos ».
            · legende   : (facultatif) le texte affiché sous la photo agrandie
          Astuce : gardez le même texte « evenement » (à la lettre près) pour toutes
-         les photos d'une même sortie — c'est ce qui les range dans le même bloc.
+         les photos d'une même sortie — c'est ce qui les range dans le même album.
+         La couverture de l'album = la 1re photo de cet évènement dans la liste.
          Pour ajouter une photo : déposez le fichier dans le dossier « galerie/ »
          sur GitHub, puis copiez une ligne ci-dessous, collez-la et changez les
          valeurs (gardez la virgule en fin de ligne). Pour retirer : supprimez la
@@ -919,8 +950,20 @@ body.modal-open{overflow:hidden}
     ];
     </script>
 
-    <div class="gallery-groups" id="galleryGrid"></div>
+    <!-- Grille des albums (une couverture par évènement) -->
+    <div class="albums" id="albumsGrid"></div>
 
+    <!-- Vue plein écran d'un album : toutes les photos de l'évènement -->
+    <div class="album-view" id="albumView" hidden>
+      <div class="av-bar">
+        <button type="button" class="av-back" data-avback aria-label="Retour aux albums">‹ <span>Retour aux albums</span></button>
+        <h3 class="av-title" id="avTitle"></h3>
+        <span class="av-count" id="avCount"></span>
+      </div>
+      <div class="gallery av-grid" id="avGrid"></div>
+    </div>
+
+    <!-- Visionneuse plein écran d'une photo -->
     <div class="lightbox" id="lightbox" hidden>
       <button type="button" class="lb-close" data-lbclose aria-label="Fermer">×</button>
       <button type="button" class="lb-nav lb-prev" data-lbprev aria-label="Photo précédente">‹</button>
@@ -933,71 +976,102 @@ body.modal-open{overflow:hidden}
 
     <script>
     (function(){
-      var grid = document.getElementById('galleryGrid');
-      if (!grid) return;
-      var list = (window.AGM_GALERIE || []).filter(function(p){ return p && p.src; });
+      var wrap = document.getElementById('albumsGrid');
+      if (!wrap) return;
+      var all = (window.AGM_GALERIE || []).filter(function(p){ return p && p.src; });
       function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
         return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+      function plural(n){ return n + ' photo' + (n > 1 ? 's' : ''); }
 
-      if (!list.length){
-        grid.outerHTML = '<div class="ev-empty reveal">'
+      if (!all.length){
+        wrap.outerHTML = '<div class="ev-empty reveal">'
           + '<h3>Les photos arrivent bientôt</h3>'
           + '<p>Les clichés de nos évènements seront ajoutés ici. En attendant, retrouvez-nous sur les réseaux.</p>'
           + '</div>';
         return;
       }
 
-      /* Regroupement par nom d'évènement (l'ordre d'apparition est conservé) */
-      var groups = [], byName = {};
-      list.forEach(function(p, gi){
-        var nom = (p.evenement || '').trim();
-        var key = nom || '__sans__';
-        if (!byName[key]){ byName[key] = { nom:nom, items:[] }; groups.push(byName[key]); }
-        byName[key].items.push({ p:p, gi:gi });
+      /* Un album par nom d'évènement (l'ordre d'apparition est conservé) */
+      var albums = [], byName = {};
+      all.forEach(function(p){
+        var nom = (p.evenement || '').trim() || 'Autres photos';
+        if (!byName[nom]){ byName[nom] = { nom:nom, items:[] }; albums.push(byName[nom]); }
+        byName[nom].items.push(p);
       });
 
-      grid.innerHTML = groups.map(function(g){
-        var head = g.nom ? '<h3 class="gal-group-title">'+esc(g.nom)+'</h3>' : '';
-        var cells = g.items.map(function(it, j){
-          var cap = it.p.legende ? esc(it.p.legende) : (it.p.evenement ? esc(it.p.evenement) : '');
-          return '<button type="button" class="gcell reveal" data-i="'+it.gi+'" style="--d:'+(j%6*70)+'ms">'
-               +   '<img src="'+esc(it.p.src)+'" alt="'+cap+'" loading="lazy">'
-               + '</button>';
-        }).join('');
-        return '<div class="gal-group reveal">'+head+'<div class="gallery">'+cells+'</div></div>';
+      /* Couvertures des albums */
+      wrap.innerHTML = albums.map(function(a, ai){
+        var cover = a.items[0];
+        return '<button type="button" class="album reveal" data-a="'+ai+'" style="--d:'+((ai%6)*70)+'ms">'
+             +   '<img src="'+esc(cover.src)+'" alt="'+esc(a.nom)+'" loading="lazy">'
+             +   '<span class="album-badge">🖼 '+a.items.length+'</span>'
+             +   '<span class="album-meta"><span class="album-name">'+esc(a.nom)+'</span>'
+             +     '<span class="album-count">'+plural(a.items.length)+'</span></span>'
+             + '</button>';
       }).join('');
 
-      /* --- Visionneuse plein écran (lightbox) --- */
-      var lb = document.getElementById('lightbox');
+      /* --- Vue album --- */
+      var view   = document.getElementById('albumView');
+      var avTitle= document.getElementById('avTitle');
+      var avCount= document.getElementById('avCount');
+      var avGrid = document.getElementById('avGrid');
+      /* --- Visionneuse (lightbox) --- */
+      var lb    = document.getElementById('lightbox');
       var lbImg = document.getElementById('lbImg');
       var lbCap = document.getElementById('lbCap');
+      var active = [];   /* photos de l'album ouvert */
       var cur = 0;
-      function show(i){
-        cur = (i + list.length) % list.length;
-        var p = list[cur];
-        var txt = p.legende || p.evenement || '';
-        lbImg.src = p.src;
-        lbImg.alt = txt;
-        lbCap.textContent = txt;
-        lbCap.hidden = !txt;
+
+      function openAlbum(ai){
+        var a = albums[ai]; if (!a) return;
+        active = a.items;
+        avTitle.textContent = a.nom;
+        avCount.textContent = plural(a.items.length);
+        avGrid.innerHTML = active.map(function(p, i){
+          var cap = p.legende ? esc(p.legende) : esc(p.evenement || '');
+          return '<button type="button" class="gcell" data-i="'+i+'">'
+               +   '<img src="'+esc(p.src)+'" alt="'+cap+'" loading="lazy">'
+               + '</button>';
+        }).join('');
+        view.scrollTop = 0;
+        view.hidden = false;
+        document.body.classList.add('modal-open');
       }
-      function open(i){ show(i); lb.hidden = false; document.body.classList.add('modal-open'); }
-      function close(){ lb.hidden = true; lbImg.src = ''; document.body.classList.remove('modal-open'); }
-      grid.addEventListener('click', function(e){
+      function closeAlbum(){ view.hidden = true; document.body.classList.remove('modal-open'); }
+
+      function lbShow(i){
+        cur = (i + active.length) % active.length;
+        var p = active[cur];
+        var txt = p.legende || p.evenement || '';
+        lbImg.src = p.src; lbImg.alt = txt;
+        lbCap.textContent = txt; lbCap.hidden = !txt;
+      }
+      function lbOpen(i){ lbShow(i); lb.hidden = false; }   /* body déjà en modal-open */
+      function lbClose(){ lb.hidden = true; lbImg.src = ''; }
+
+      wrap.addEventListener('click', function(e){
+        var c = e.target.closest('.album'); if (!c) return;
+        openAlbum(parseInt(c.getAttribute('data-a'), 10) || 0);
+      });
+      view.addEventListener('click', function(e){
+        if (e.target.closest('[data-avback]')) return closeAlbum();
         var cell = e.target.closest('.gcell'); if (!cell) return;
-        open(parseInt(cell.getAttribute('data-i'), 10) || 0);
+        lbOpen(parseInt(cell.getAttribute('data-i'), 10) || 0);
       });
       lb.addEventListener('click', function(e){
-        if (e.target.hasAttribute('data-lbclose')) return close();
-        if (e.target.hasAttribute('data-lbprev')) return show(cur - 1);
-        if (e.target.hasAttribute('data-lbnext')) return show(cur + 1);
-        if (e.target === lb) close();
+        if (e.target.hasAttribute('data-lbclose')) return lbClose();
+        if (e.target.hasAttribute('data-lbprev')) return lbShow(cur - 1);
+        if (e.target.hasAttribute('data-lbnext')) return lbShow(cur + 1);
+        if (e.target === lb) lbClose();
       });
       document.addEventListener('keydown', function(e){
-        if (lb.hidden) return;
-        if (e.key === 'Escape') close();
-        else if (e.key === 'ArrowLeft') show(cur - 1);
-        else if (e.key === 'ArrowRight') show(cur + 1);
+        if (!lb.hidden){
+          if (e.key === 'Escape') lbClose();
+          else if (e.key === 'ArrowLeft') lbShow(cur - 1);
+          else if (e.key === 'ArrowRight') lbShow(cur + 1);
+          return;
+        }
+        if (!view.hidden && e.key === 'Escape') closeAlbum();
       });
     })();
     </script>
