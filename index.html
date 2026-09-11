@@ -118,7 +118,7 @@ img{max-width:100%;display:block}
 .hero .actions{display:flex;flex-wrap:wrap;gap:12px;animation:floatUp 1s .34s cubic-bezier(.2,.7,.3,1) both}
 
 .btn{display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:99px;font-weight:600;font-size:15px;
-  font-family:inherit;cursor:pointer;
+  font-family:inherit;cursor:pointer;border:0;
   position:relative;overflow:hidden;transition:transform .25s,background .25s,border-color .25s,box-shadow .25s}
 .btn>*{position:relative;z-index:1}
 .btn::after{content:"";position:absolute;top:0;left:-130%;width:55%;height:100%;z-index:0;pointer-events:none;
@@ -575,6 +575,10 @@ body.modal-open{overflow:hidden}
   flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .av-count{font-size:13px;color:var(--txt-dim);white-space:nowrap}
 .av-grid{padding:22px}
+/* Pop-up galerie (couche sous la vue album) */
+.gallery-modal{z-index:1800}
+.gallery-modal .gallery-modal-body{padding-top:26px;padding-bottom:64px}
+.gallery-intro{color:var(--txt-dim);font-size:15.5px;margin:0 0 22px;max-width:60ch}
 @media(max-width:560px){
   .av-bar{padding:12px 14px;gap:10px}
   .av-back span{display:none}.av-back{padding:9px 12px}
@@ -904,20 +908,13 @@ body.modal-open{overflow:hidden}
     </div>
 
     <div class="gallery-cta reveal">
-      <a href="#galerie" class="btn btn-p">📸 Voir la galerie photos</a>
+      <button type="button" class="btn btn-p" id="openGallery" aria-haspopup="dialog">📸 Voir la galerie photos</button>
     </div>
   </div>
 </section>
 
-<!-- ============ GALERIE ============ -->
-<section id="galerie">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="sec-label">GALERIE</span>
-      <h2>En images</h2>
-      <p>Un album par évènement. Cliquez sur un album pour voir toutes ses photos.</p>
-    </div>
-
+<!-- ============ GALERIE (pop-up ouvert par le bouton des Évènements) ============ -->
+<div id="galerie">
     <!-- ══════════════════════════════════════════════════════════════
          ▼▼▼  LA GALERIE PHOTOS — MODIFIEZ TOUT ICI  ▼▼▼
          Chaque photo = un objet { } entre accolades. Sur chaque ligne :
@@ -950,8 +947,18 @@ body.modal-open{overflow:hidden}
     ];
     </script>
 
-    <!-- Grille des albums (une couverture par évènement) -->
-    <div class="albums" id="albumsGrid"></div>
+    <!-- Pop-up GALERIE : la grille des albums (une couverture par évènement) -->
+    <div class="album-view gallery-modal" id="galleryModal" hidden role="dialog" aria-modal="true" aria-label="Galerie photos">
+      <div class="av-bar">
+        <button type="button" class="av-back" data-galclose aria-label="Fermer la galerie">‹ <span>Fermer</span></button>
+        <h3 class="av-title">Galerie — En images</h3>
+        <span class="av-count" id="galCount"></span>
+      </div>
+      <div class="wrap gallery-modal-body">
+        <p class="gallery-intro">Un album par évènement. Cliquez sur un album pour voir toutes ses photos.</p>
+        <div class="albums" id="albumsGrid"></div>
+      </div>
+    </div>
 
     <!-- Vue plein écran d'un album : toutes les photos de l'évènement -->
     <div class="album-view" id="albumView" hidden>
@@ -977,32 +984,64 @@ body.modal-open{overflow:hidden}
     <script>
     (function(){
       var wrap = document.getElementById('albumsGrid');
-      if (!wrap) return;
+      var modal = document.getElementById('galleryModal');
+      var openBtn = document.getElementById('openGallery');
+      if (!wrap || !modal || !openBtn) return;
       var all = (window.AGM_GALERIE || []).filter(function(p){ return p && p.src; });
       function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
         return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
       function plural(n){ return n + ' photo' + (n > 1 ? 's' : ''); }
 
+      /* --- Références des couches (pop-up galerie > vue album > visionneuse) --- */
+      var view   = document.getElementById('albumView');
+      var avTitle= document.getElementById('avTitle');
+      var avCount= document.getElementById('avCount');
+      var avGrid = document.getElementById('avGrid');
+      var galCount = document.getElementById('galCount');
+      var lb    = document.getElementById('lightbox');
+      var lbImg = document.getElementById('lbImg');
+      var lbCap = document.getElementById('lbCap');
+      var albums = [], active = [], cur = 0;
+
+      /* Le scroll de la page est bloqué dès qu'une couche est ouverte */
+      function syncScroll(){
+        var any = !modal.hidden || !view.hidden || !lb.hidden;
+        document.body.classList.toggle('modal-open', any);
+      }
+
+      /* --- Pop-up galerie --- */
+      function openGallery(){ modal.hidden = false; modal.scrollTop = 0; syncScroll(); }
+      function closeGallery(){ modal.hidden = true; syncScroll(); }
+      openBtn.addEventListener('click', openGallery);
+      modal.addEventListener('click', function(e){
+        if (e.target.closest('[data-galclose]')) return closeGallery();
+        var c = e.target.closest('.album'); if (!c) return;
+        openAlbum(parseInt(c.getAttribute('data-a'), 10) || 0);
+      });
+
       if (!all.length){
-        wrap.outerHTML = '<div class="ev-empty reveal">'
+        galCount.textContent = '';
+        wrap.outerHTML = '<div class="ev-empty">'
           + '<h3>Les photos arrivent bientôt</h3>'
           + '<p>Les clichés de nos évènements seront ajoutés ici. En attendant, retrouvez-nous sur les réseaux.</p>'
           + '</div>';
-        return;
+        return;   /* le pop-up s'ouvre quand même (message ci-dessus) */
       }
 
       /* Un album par nom d'évènement (l'ordre d'apparition est conservé) */
-      var albums = [], byName = {};
+      var byName = {};
       all.forEach(function(p){
         var nom = (p.evenement || '').trim() || 'Autres photos';
         if (!byName[nom]){ byName[nom] = { nom:nom, items:[] }; albums.push(byName[nom]); }
         byName[nom].items.push(p);
       });
+      galCount.textContent = albums.length + ' album' + (albums.length > 1 ? 's' : '')
+                           + ' · ' + plural(all.length);
 
       /* Couvertures des albums */
       wrap.innerHTML = albums.map(function(a, ai){
         var cover = a.items[0];
-        return '<button type="button" class="album reveal" data-a="'+ai+'" style="--d:'+((ai%6)*70)+'ms">'
+        return '<button type="button" class="album" data-a="'+ai+'">'
              +   '<img src="'+esc(cover.src)+'" alt="'+esc(a.nom)+'" loading="lazy">'
              +   '<span class="album-badge">🖼 '+a.items.length+'</span>'
              +   '<span class="album-meta"><span class="album-name">'+esc(a.nom)+'</span>'
@@ -1011,17 +1050,6 @@ body.modal-open{overflow:hidden}
       }).join('');
 
       /* --- Vue album --- */
-      var view   = document.getElementById('albumView');
-      var avTitle= document.getElementById('avTitle');
-      var avCount= document.getElementById('avCount');
-      var avGrid = document.getElementById('avGrid');
-      /* --- Visionneuse (lightbox) --- */
-      var lb    = document.getElementById('lightbox');
-      var lbImg = document.getElementById('lbImg');
-      var lbCap = document.getElementById('lbCap');
-      var active = [];   /* photos de l'album ouvert */
-      var cur = 0;
-
       function openAlbum(ai){
         var a = albums[ai]; if (!a) return;
         active = a.items;
@@ -1035,10 +1063,11 @@ body.modal-open{overflow:hidden}
         }).join('');
         view.scrollTop = 0;
         view.hidden = false;
-        document.body.classList.add('modal-open');
+        syncScroll();
       }
-      function closeAlbum(){ view.hidden = true; document.body.classList.remove('modal-open'); }
+      function closeAlbum(){ view.hidden = true; syncScroll(); }
 
+      /* --- Visionneuse (lightbox) --- */
       function lbShow(i){
         cur = (i + active.length) % active.length;
         var p = active[cur];
@@ -1046,13 +1075,9 @@ body.modal-open{overflow:hidden}
         lbImg.src = p.src; lbImg.alt = txt;
         lbCap.textContent = txt; lbCap.hidden = !txt;
       }
-      function lbOpen(i){ lbShow(i); lb.hidden = false; }   /* body déjà en modal-open */
-      function lbClose(){ lb.hidden = true; lbImg.src = ''; }
+      function lbOpen(i){ lbShow(i); lb.hidden = false; syncScroll(); }
+      function lbClose(){ lb.hidden = true; lbImg.src = ''; syncScroll(); }
 
-      wrap.addEventListener('click', function(e){
-        var c = e.target.closest('.album'); if (!c) return;
-        openAlbum(parseInt(c.getAttribute('data-a'), 10) || 0);
-      });
       view.addEventListener('click', function(e){
         if (e.target.closest('[data-avback]')) return closeAlbum();
         var cell = e.target.closest('.gcell'); if (!cell) return;
@@ -1064,6 +1089,8 @@ body.modal-open{overflow:hidden}
         if (e.target.hasAttribute('data-lbnext')) return lbShow(cur + 1);
         if (e.target === lb) lbClose();
       });
+
+      /* Échap / flèches : agit sur la couche la plus haute ouverte */
       document.addEventListener('keydown', function(e){
         if (!lb.hidden){
           if (e.key === 'Escape') lbClose();
@@ -1071,12 +1098,12 @@ body.modal-open{overflow:hidden}
           else if (e.key === 'ArrowRight') lbShow(cur + 1);
           return;
         }
-        if (!view.hidden && e.key === 'Escape') closeAlbum();
+        if (!view.hidden){ if (e.key === 'Escape') closeAlbum(); return; }
+        if (!modal.hidden && e.key === 'Escape') closeGallery();
       });
     })();
     </script>
-  </div>
-</section>
+</div>
 
 <!-- ============ CONVOIS ============ -->
 <section id="convois">
