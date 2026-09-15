@@ -584,6 +584,12 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offse
   background:linear-gradient(140deg,var(--accent),var(--accent-2));box-shadow:0 6px 16px -6px var(--glow)}
 .charte-item h4{font-size:16px;font-stretch:106%;margin:2px 0 5px}
 .charte-item p{font-size:13.5px;color:var(--txt-dim);line-height:1.5;margin:0}
+.tuto-head{font-family:"Archivo";font-weight:800;font-stretch:106%;font-size:16px;
+  margin:22px 0 12px;display:flex;align-items:center;gap:8px;color:var(--txt)}
+.tuto-head:first-of-type{margin-top:4px}
+.linklike{background:none;border:0;color:var(--accent-2);font:inherit;font-size:13.5px;
+  cursor:pointer;text-decoration:underline;padding:0}
+.linklike:hover{color:var(--accent)}
 body.modal-open{overflow:hidden}
 
 /* ---- Galerie photos ---- */
@@ -1438,6 +1444,9 @@ body.modal-open{overflow:hidden}
       <button type="button" class="btn btn-p" id="notifBtn">🔔 Être alerté des prochains convois</button>
     </div>
     <p class="reveal" id="notifHint" style="--d:260ms;font-size:13px;color:var(--txt-dim);margin-top:10px"></p>
+    <p class="reveal" style="--d:300ms;margin-top:4px">
+      <button type="button" class="linklike" id="installBtn">📱 Comment installer l'appli &amp; activer les notifications ?</button>
+    </p>
   </div>
 </section>
 
@@ -1645,6 +1654,47 @@ body.modal-open{overflow:hidden}
   var btn = document.getElementById('charteBtn');
   if (!modal || !btn) return;
   function open(){ modal.hidden = false; document.body.classList.add('modal-open'); }
+  function close(){ modal.hidden = true; document.body.classList.remove('modal-open'); }
+  btn.addEventListener('click', open);
+  modal.addEventListener('click', function(e){ if (e.target.hasAttribute('data-close')) close(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !modal.hidden) close(); });
+})();
+</script>
+
+<!-- Pop-up TUTO : installer l'appli + activer les notifications -->
+<div class="modal" id="installModal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="installTitle">
+    <button type="button" class="modal-close" data-close aria-label="Fermer">×</button>
+    <h3 id="installTitle">Installer l'appli &amp; les notifications</h3>
+    <p class="dim" style="margin:0 0 16px">En 1 minute : ajoute AGM Motors 44 à ton écran d'accueil comme une appli, puis active les notifications pour être prévenu des prochains convois.</p>
+
+    <div class="tuto-head">🍎 Sur iPhone / iPad <span style="font-weight:600;color:var(--txt-dim);font-size:13px">(avec Safari)</span></div>
+    <div class="charte-list">
+      <div class="charte-item"><span class="n">1</span><div><h4>Ouvre le site dans Safari</h4><p>Va sur <b>agm-motors-44.fr</b> avec <b>Safari</b> (ça ne marche pas avec Chrome sur iPhone).</p></div></div>
+      <div class="charte-item"><span class="n">2</span><div><h4>Bouton Partager</h4><p>Touche l'icône <b>Partager</b> (le carré avec une flèche vers le haut ⬆️), en bas de l'écran.</p></div></div>
+      <div class="charte-item"><span class="n">3</span><div><h4>Sur l'écran d'accueil</h4><p>Fais défiler le menu, touche <b>« Sur l'écran d'accueil »</b>, puis <b>« Ajouter »</b> en haut à droite.</p></div></div>
+      <div class="charte-item"><span class="n">4</span><div><h4>Ouvre l'appli</h4><p>Lance AGM Motors 44 depuis sa <b>nouvelle icône</b> (pas depuis Safari).</p></div></div>
+      <div class="charte-item"><span class="n">5</span><div><h4>Active les notifications</h4><p>Tout en bas de la page, touche <b>« 🔔 Être alerté des prochains convois »</b>, puis <b>« Autoriser »</b>.</p></div></div>
+    </div>
+
+    <div class="tuto-head">🤖 Sur Android <span style="font-weight:600;color:var(--txt-dim);font-size:13px">(avec Chrome)</span></div>
+    <div class="charte-list">
+      <div class="charte-item"><span class="n">1</span><div><h4>Ouvre le site dans Chrome</h4><p>Va sur <b>agm-motors-44.fr</b> avec <b>Chrome</b>.</p></div></div>
+      <div class="charte-item"><span class="n">2</span><div><h4>Menu ⋮ → Installer</h4><p>Touche le menu <b>⋮</b> (en haut à droite), puis <b>« Installer l'application »</b> (ou « Ajouter à l'écran d'accueil »).</p></div></div>
+      <div class="charte-item"><span class="n">3</span><div><h4>Confirme</h4><p>L'icône AGM apparaît sur ton écran d'accueil.</p></div></div>
+      <div class="charte-item"><span class="n">4</span><div><h4>Active les notifications</h4><p>Sur la page, touche <b>« 🔔 Être alerté des prochains convois »</b>, puis <b>« Autoriser »</b>.</p></div></div>
+    </div>
+
+    <p class="dim" style="margin:16px 0 0;font-size:12.5px">💡 Sur iPhone, les notifications fonctionnent <b>uniquement</b> si tu ouvres le site depuis l'icône installée (pas dans Safari) — c'est une contrainte d'Apple.</p>
+  </div>
+</div>
+<script>
+(function(){
+  var modal = document.getElementById('installModal');
+  var btn = document.getElementById('installBtn');
+  if (!modal || !btn) return;
+  function open(){ modal.hidden = false; modal.querySelector('.modal-box').scrollTop = 0; document.body.classList.add('modal-open'); }
   function close(){ modal.hidden = true; document.body.classList.remove('modal-open'); }
   btn.addEventListener('click', open);
   modal.addEventListener('click', function(e){ if (e.target.hasAttribute('data-close')) close(); });
