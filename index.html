@@ -1430,7 +1430,7 @@ body.modal-open{overflow:hidden}
     <h2 class="reveal">Venez rouler avec nous</h2>
     <p class="reveal" style="--d:80ms">Passionnés d'automobile en Loire-Atlantique : nos évènements et convois sont ouverts à tous. La carte AGM donne accès aux remises partenaires, et les pros peuvent nous rejoindre. Écrivez-nous !</p>
     <div class="actions reveal" style="--d:160ms">
-      <a class="btn btn-p" href="mailto:agmmotors44@gmail.com">agmmotors44@gmail.com</a>
+      <a class="btn btn-s" href="mailto:agmmotors44@gmail.com">agmmotors44@gmail.com</a>
       <a class="btn btn-s" href="https://www.instagram.com/agm_motors44/" target="_blank" rel="noopener">Instagram</a>
       <a class="btn btn-s" href="https://www.tiktok.com/@agm_motors44" target="_blank" rel="noopener">TikTok</a>
     </div>
@@ -1665,41 +1665,48 @@ if ('serviceWorker' in navigator) {
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
 window.OneSignalDeferred = window.OneSignalDeferred || [];
-OneSignalDeferred.push(async function (OneSignal) {
+window.OneSignalDeferred.push(async function (OneSignal) {
   await OneSignal.init({
     appId: "8a9d3726-f8a0-4cb6-a9fe-a0bbf240b54a",
     serviceWorkerParam: { scope: "/" },
     serviceWorkerPath: "sw.js"
   });
+  // Si l'utilisateur a déjà autorisé, on l'indique
+  try {
+    if (OneSignal.Notifications && OneSignal.Notifications.permission) {
+      var b = document.getElementById('notifBtn');
+      var h = document.getElementById('notifHint');
+      if (b) { b.textContent = "🔔 Notifications activées"; b.disabled = true; }
+      if (h) h.textContent = "C'est bon : vous serez prévenu des prochains convois. Merci !";
+    }
+  } catch (e) {}
+});
 
+/* Le clic est branché tout de suite (indépendamment du chargement d'OneSignal),
+   la demande d'autorisation est mise en file et s'exécute dès qu'OneSignal est prêt. */
+(function () {
   var btn = document.getElementById('notifBtn');
   var hint = document.getElementById('notifHint');
   if (!btn) return;
-
-  function refresh() {
-    if (!OneSignal.Notifications.isPushSupported()) {
-      btn.disabled = true;
-      if (hint) hint.textContent = "Sur iPhone : ajoutez d'abord le site à l'écran d'accueil, puis rouvrez-le depuis l'icône pour activer les notifications.";
-      return;
-    }
-    if (OneSignal.Notifications.permission) {
-      btn.textContent = "🔔 Notifications activées";
-      btn.disabled = true;
-      if (hint) hint.textContent = "C'est bon : vous serez prévenu des prochains convois. Merci !";
-    }
-  }
-  refresh();
-
-  btn.addEventListener('click', async function () {
-    try {
-      await OneSignal.Notifications.requestPermission();
-      refresh();
-      if (!OneSignal.Notifications.permission && hint) {
-        hint.textContent = "Notifications non activées. Vérifiez que vous les avez autorisées dans le navigateur.";
+  btn.addEventListener('click', function () {
+    if (hint) hint.textContent = "Ouverture de la demande d'autorisation…";
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    window.OneSignalDeferred.push(async function (OneSignal) {
+      try {
+        await OneSignal.Notifications.requestPermission();
+        if (OneSignal.Notifications.permission) {
+          btn.textContent = "🔔 Notifications activées";
+          btn.disabled = true;
+          if (hint) hint.textContent = "C'est bon : vous serez prévenu des prochains convois. Merci !";
+        } else if (hint) {
+          hint.textContent = "Autorisation non accordée. Sur iPhone, ouvrez d'abord le site depuis l'icône ajoutée à l'écran d'accueil.";
+        }
+      } catch (e) {
+        if (hint) hint.textContent = "Les notifications ne sont pas disponibles sur cet appareil/navigateur.";
       }
-    } catch (e) {}
+    });
   });
-});
+})();
 </script>
 
 </body>
