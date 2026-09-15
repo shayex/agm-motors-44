@@ -1434,6 +1434,10 @@ body.modal-open{overflow:hidden}
       <a class="btn btn-s" href="https://www.instagram.com/agm_motors44/" target="_blank" rel="noopener">Instagram</a>
       <a class="btn btn-s" href="https://www.tiktok.com/@agm_motors44" target="_blank" rel="noopener">TikTok</a>
     </div>
+    <div class="actions reveal" style="--d:220ms;margin-top:14px">
+      <button type="button" class="btn btn-p" id="notifBtn">🔔 Être alerté des prochains convois</button>
+    </div>
+    <p class="reveal" id="notifHint" style="--d:260ms;font-size:13px;color:var(--txt-dim);margin-top:10px"></p>
   </div>
 </section>
 
@@ -1655,6 +1659,47 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(function () {});
   });
 }
+</script>
+
+<!-- Notifications push (OneSignal) -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+OneSignalDeferred.push(async function (OneSignal) {
+  await OneSignal.init({
+    appId: "8a9d3726-f8a0-4cb6-a9fe-a0bbf240b54a",
+    serviceWorkerParam: { scope: "/" },
+    serviceWorkerPath: "sw.js"
+  });
+
+  var btn = document.getElementById('notifBtn');
+  var hint = document.getElementById('notifHint');
+  if (!btn) return;
+
+  function refresh() {
+    if (!OneSignal.Notifications.isPushSupported()) {
+      btn.disabled = true;
+      if (hint) hint.textContent = "Sur iPhone : ajoutez d'abord le site à l'écran d'accueil, puis rouvrez-le depuis l'icône pour activer les notifications.";
+      return;
+    }
+    if (OneSignal.Notifications.permission) {
+      btn.textContent = "🔔 Notifications activées";
+      btn.disabled = true;
+      if (hint) hint.textContent = "C'est bon : vous serez prévenu des prochains convois. Merci !";
+    }
+  }
+  refresh();
+
+  btn.addEventListener('click', async function () {
+    try {
+      await OneSignal.Notifications.requestPermission();
+      refresh();
+      if (!OneSignal.Notifications.permission && hint) {
+        hint.textContent = "Notifications non activées. Vérifiez que vous les avez autorisées dans le navigateur.";
+      }
+    } catch (e) {}
+  });
+});
 </script>
 
 </body>
