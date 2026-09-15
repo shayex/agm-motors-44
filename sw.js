@@ -1,3 +1,6 @@
+/* OneSignal (notifications push) — doit être importé tout en haut du worker */
+try { importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js'); } catch (e) {}
+
 /* Service worker minimal : rend le site installable (PWA) et lisible hors-ligne.
    Stratégie « réseau d'abord » : on affiche toujours la version en ligne la plus
    récente, et on ne sert le cache qu'en cas de coupure réseau — donc les mises à
